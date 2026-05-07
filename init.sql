@@ -39,7 +39,25 @@ CREATE INDEX idx_movimiento_producto ON movimiento(producto_id);
 CREATE INDEX idx_movimiento_fecha ON movimiento(fecha);
 CREATE INDEX idx_producto_nombre ON producto(nombre);
 
--- 4. Seguridad: Configuración de prod_user (Principio de Menor Privilegio)
+-- 4. Datos de Ejemplo
+INSERT INTO categoria (nombre, descripcion) VALUES 
+('Electrónica', 'Dispositivos electrónicos y accesorios'),
+('Hogar', 'Artículos para el hogar y decoración'),
+('Oficina', 'Insumos y muebles de oficina');
+
+INSERT INTO producto (nombre, categoria_id, precio_unitario, stock_actual) VALUES 
+('Laptop Pro 15', 1, 1200.00, 10),
+('Mouse Inalámbrico', 1, 25.50, 50),
+('Silla Ergonómica', 3, 150.00, 15),
+('Cafetera Express', 2, 85.00, 8);
+
+INSERT INTO movimiento (producto_id, tipo, cantidad, motivo, usuario) VALUES 
+(1, 'entrada', 10, 'Carga inicial de inventario', 'admin_sistema'),
+(2, 'entrada', 50, 'Compra a proveedor X', 'compras_user'),
+(3, 'entrada', 15, 'Carga inicial de inventario', 'admin_sistema'),
+(4, 'entrada', 8, 'Carga inicial de inventario', 'admin_sistema');
+
+-- 5. Seguridad: Configuración de prod_user (Principio de Menor Privilegio)
 -- Conectar a la base de datos y asignar permisos en el esquema público
 GRANT USAGE ON SCHEMA public TO prod_user;
 GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO prod_user;
