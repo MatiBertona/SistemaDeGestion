@@ -29,3 +29,11 @@ Se implementó un build en dos etapas para optimizar la imagen final:
 - **Eficiencia:** Nginx es uno de los servidores web más rápidos del mundo para servir contenido estático.
 - **Ligereza:** La imagen final es significativamente más pequeña comparada con una que incluya Node.js en tiempo de ejecución.
 - **Seguridad:** Reduce la superficie de ataque al no exponer el entorno de ejecución de Node.js al exterior.
+
+## 5. Fuentes Oficiales y Referencias
+Para profundizar en las bondades de estas tecnologías, se consultó la documentación oficial:
+- **React:** [https://react.dev/](https://react.dev/) - "The library for web and native user interfaces."
+- **Vite:** [https://vitejs.dev/](https://vitejs.dev/) - "Next Generation Frontend Tooling."
+- **TypeScript:** [https://www.typescriptlang.org/](https://www.typescriptlang.org/) - "JavaScript with syntax for types."
+- **Nginx (Docker Hub):** [https://hub.docker.com/_/nginx](https://hub.docker.com/_/nginx) - "Official build of Nginx."
+- **FastAPI (Referencia para integración):** [https://fastapi.tiangolo.com/](https://fastapi.tiangolo.com/)

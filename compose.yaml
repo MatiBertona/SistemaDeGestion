@@ -31,6 +31,13 @@ services:
     networks:
       - inventory_network
 
+  frontend:
+    build:
+      context: ./frontend
+    container_name: inventario_frontend_container
+    networks:
+      - inventory_network
+
 volumes:
   inventario_pg_data:
 
