@@ -1,0 +1,107 @@
+@import "tokens";
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(147, 51, 234, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+.showcase-container {
+  padding: $space-xl;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-default);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: $space-lg;
+  margin-bottom: $space-xl;
+}
+
+.kpi-card {
+  @extend .glass-card;
+  padding: $space-lg;
+  
+  .metric {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-top: $space-sm;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.table-container {
+  @extend .glass-card;
+  overflow: hidden;
+}
+
+.premium-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: $space-lg;
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  td {
+    padding: $space-lg;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255, 255, 255, 0.02); }
+}
+
+.badge {
+  padding: $space-xs $space-md;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+
+  &.is-ok {
+    background: rgba(74, 222, 128, 0.1);
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.2);
+  }
+  &.is-warning {
+    background: rgba(251, 191, 36, 0.1);
+    color: #fbbf24;
+    border-color: rgba(251, 191, 36, 0.2);
+  }
+  &.is-danger {
+    background: rgba(248, 113, 113, 0.1);
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.2);
+  }
+}
+
+.text-secondary { color: var(--text-secondary); }
+.text-danger { color: #f87171; }

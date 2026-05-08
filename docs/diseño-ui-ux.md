@@ -45,10 +45,10 @@ Inspiración: **Linear, Stripe Dashboard, Notion**.
 
 ## 5. Tipografía
 Se priorizan fuentes modernas sin serifa:
-- **Inter** o **Geist** (por su excelente legibilidad en pantallas de datos).
+- **Geist** (por su excelente legibilidad en pantallas de datos).
 - Tracking (espaciado entre letras) ligeramente abierto.
 
-## 6. Layout
-- Composición asimétrica controlada.
-- Sidebar minimalista para navegación global.
-- Grid consistente de 8px para márgenes y paddings.
+## 7. Implementación Técnica (Sass/SCSS)
+- **Arquitectura de Tokens:** Uso de `_tokens.scss` para variables globales (colores, espaciados).
+- **Primitivas:** Estilos base en `_primitives.scss`.
+- **Escalabilidad:** Mixins y funciones para garantizar un diseño responsivo y consistente.

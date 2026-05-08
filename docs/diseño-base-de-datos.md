@@ -7,6 +7,7 @@ Este documento detalla la arquitectura, el esquema y la estrategia de seguridad 
 - **Orquestación:** Docker Compose para facilitar el despliegue y la reproducibilidad del entorno.
 - **Persistencia:** Se utiliza un volumen nombrado (`inventario_pg_data`) para asegurar que los datos persistan ante reinicios o eliminación de contenedores.
 - **Variables de Entorno:** Se utiliza un archivo `.env` para la gestión segura de credenciales y configuración del contenedor.
+- **Ubicación de Scripts:** Todos los scripts de inicialización residen en la carpeta `/basededatos`.
 
 ## 2. Organización y Seguridad (RBAC)
 Se ha implementado una separación por esquemas y roles para seguir las mejores prácticas de seguridad:
@@ -16,10 +17,10 @@ Todas las tablas relacionadas con el negocio residen en el esquema `inventario`,
 
 ### Roles y Permisos
 - **Administrador (postgres):** Acceso total para mantenimiento y tareas de superusuario.
-- **dev_user:** Rol de desarrollo con privilegios completos sobre el esquema `inventario` para agilizar las pruebas.
+- **dev_user:** Rol de desarrollo con privilegios completos (`ALL PRIVILEGES`) sobre el esquema `inventario` para agilizar las pruebas y el desarrollo.
 - **prod_user:** Rol limitado que aplica el **Principio de Menor Privilegio**:
-    - Permisos: `SELECT`, `INSERT`, `UPDATE` sobre tablas y secuencias.
-    - Restricción de Seguridad: Se ha denegado explícitamente el permiso de `DELETE` para prevenir borrados accidentales o malintencionados de registros históricos.
+    - Permisos: `USAGE` en el esquema, y `SELECT`, `INSERT`, `UPDATE` sobre tablas y secuencias.
+    - Restricción de Seguridad: Se ha ejecutado un `REVOKE DELETE` explícito para prevenir borrados accidentales o malintencionados de registros históricos en el entorno de producción.
 
 ## 3. Modelo de Datos y Reglas de Negocio
 
@@ -45,4 +46,4 @@ Para garantizar un alto rendimiento en consultas frecuentes, se han creado los s
 - **`idx_producto_nombre`**: Índice B-Tree para búsquedas rápidas por nombre de producto.
 
 ## 5. Estrategia de Inicialización
-El sistema utiliza el mecanismo nativo de PostgreSQL en Docker para inicializar el esquema y los datos de ejemplo automáticamente mediante el script `init.sql`, garantizando que cualquier desarrollador pueda levantar el entorno completo con un solo comando: `docker compose up -d`.
+El sistema utiliza el mecanismo nativo de PostgreSQL en Docker para inicializar el esquema y los datos de ejemplo automáticamente mediante el script `init.sql` ubicado en la carpeta `basededatos/`, garantizando que cualquier desarrollador pueda levantar el entorno completo con un solo comando: `docker compose up -d`.

@@ -1,0 +1,21 @@
+@import "primitives";
+
+:root {
+  // Colores Semánticos
+  --stock-ok: #{$green-glow};
+  --stock-warning: #{$amber-glow};
+  --stock-danger: #{$red-glow};
+  
+  // Glass Tokens
+  --glass-bg: #{$glass-bg};
+  --glass-border: #{$glass-border};
+  --glass-blur: #{$glass-blur};
+
+  // Text
+  --text-primary: #{$slate-50};
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  
+  // Global Styles
+  --radius-default: #{$radius-md};
+  --bg-dark: #000000;
+}

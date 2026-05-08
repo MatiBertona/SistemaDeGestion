@@ -17,21 +17,22 @@ Coordina las acciones del negocio.
 
 ### Capa de Infraestructura (Infrastructure) - Los Adaptadores
 Implementaciones técnicas y frameworks.
-- **`database/models.py`**: Modelos de SQLAlchemy (Persistencia). Mapean el esquema `inventario`.
+- **`database/models.py`**: Modelos de SQLAlchemy (Persistencia). Mapean el esquema `inventario` detallado en el [Diseño de Base de Datos](./diseño-base-de-datos.md).
 - **`database/repository.py`**: Implementación concreta de `ProductoRepository` usando SQLAlchemy Async. Realiza la conversión de Modelos de BD a Entidades de Dominio.
-- **`http/controller.py`**: Adaptador de entrada (FastAPI). Gestiona el request HTTP.
+- **`http/controller.py`**: Adaptador de entrada (FastAPI). Gestiona el request HTTP y la inyección de dependencias.
 - **`http/schemas.py`**: Recursos (Pydantic) para la serialización del JSON de respuesta.
 
 ## 2. Flujo de Datos
 1. `GET /productos?categoria=electronica` -> **Controller** (Infrastructure).
-2. El **Controller** llama al **Application Service**.
+2. El **Controller** inyecta la implementación del repositorio en el **Application Service**.
 3. El **Service** llama al **Repository** (Interface).
 4. El **Repository Implementation** (Infrastructure) consulta la BD mediante el **ORM**, carga la relación `categoria` y mapea los resultados a **Entities** (Domain).
 5. El **Service** devuelve las **Entities**.
 6. El **Controller** serializa las **Entities** usando **Schemas** (Pydantic) para emitir el JSON final.
 
 ## 3. Requerimientos Cumplidos
-- **JSON:** Formato de salida estándar mediante Pydantic.
+- **JSON:** Formato de salida estándar mediante Pydantic (v2).
 - **Filtro por Categoría:** Soportado en el Repositorio y Servicio.
-- **Nombre de Categoría:** Incluido mediante la relación cargada por el ORM y expuesta en el Schema.
-- **Stock Actual:** Incluido en la Entidad y el Schema.
+- **Nombre de Categoría:** Incluido mediante la relación cargada por el ORM (`joinedload`) y expuesta en el Schema.
+- **Stock Actual:** Incluido en la Entidad y el Schema con validación de tipos.
+
