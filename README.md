@@ -95,7 +95,7 @@ Podés ver los detalles en la [Documentación de la base de datos](./docs/diseñ
 
 ### Dominio de Productos (Arquitectura Hexagonal)
 
-Podés ver los detalles en la [Documentación del Backend](./docs/diseño-ddd-productos.md).
+Podés ver los detalles en la [Documentación del Backend](./docs/diseño-backend.md).
 
 ### Frontend (React + TypeScript)
 
