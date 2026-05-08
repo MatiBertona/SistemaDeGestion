@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, Query
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
-from ..database.repository import SQLAlchemyProductoRepository
-from ...application.services import ListarProductosService
-from .schemas import ProductoResource
+from app.productos.infrastructure.database.repository import SQLAlchemyProductoRepository
+from app.productos.application.services import ListarProductosService
+from app.productos.infrastructure.http.schemas import ProductoResource
 
 router = APIRouter(prefix="/productos", tags=["Productos"])
 

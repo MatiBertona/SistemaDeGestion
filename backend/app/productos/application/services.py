@@ -1,6 +1,6 @@
 from typing import List, Optional
-from ..domain.entities import ProductoEntity
-from ..domain.repository_interface import ProductoRepository
+from app.productos.domain.entities import ProductoEntity
+from app.productos.domain.repository_interface import ProductoRepository
 
 class ListarProductosService:
     def __init__(self, repository: ProductoRepository):

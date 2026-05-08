@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from .entities import ProductoEntity
+from app.productos.domain.entities import ProductoEntity
 
 class ProductoRepository(ABC):
     @abstractmethod

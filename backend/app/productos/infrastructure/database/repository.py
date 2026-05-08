@@ -5,7 +5,7 @@ from sqlalchemy.orm import joinedload
 from app.productos.domain.entities import ProductoEntity
 from app.categorias.domain.entities import CategoriaEntity
 from app.productos.domain.repository_interface import ProductoRepository
-from .models import ProductoModel, CategoriaModel
+from app.productos.infrastructure.database.models import ProductoModel, CategoriaModel
 
 class SQLAlchemyProductoRepository(ProductoRepository):
     def __init__(self, session: AsyncSession):
