@@ -177,3 +177,42 @@ https://es.react.dev/
 https://www.godaddy.com/resources/latam/tecnologia/log-que-es
 
 https://lawsofux-com.translate.goog/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc
+
+## 6. Respuestas a Preguntas Conceptuales (Evaluación)
+
+A continuación se responden las preguntas teóricas planteadas en la consigna de evaluación:
+
+### 1. Base de Datos
+*   **¿Por qué elegir PostgreSQL?** Se eligió por ser un motor relacional robusto, de código abierto, con excelente cumplimiento ACID y capacidades avanzadas (como soporte nativo para JSON, crucial si los requerimientos de productos se vuelven dinámicos). Es el estándar de facto para sistemas transaccionales serios.
+*   **Uso de ORM (Ventajas/Desventajas):** Sí, se utiliza SQLAlchemy.
+    *   *Ventajas:* Acelera el desarrollo, abstrae las consultas SQL evitando inyecciones (SQL Injection), y facilita el mapeo directo a objetos de dominio (Entities) mediante Arquitectura Hexagonal.
+    *   *Desventajas:* Curva de aprendizaje inicial, y en consultas *muy* masivas o reportes complejos, el ORM puede generar SQL menos eficiente que un query crudo optimizado (aunque SQLAlchemy permite bajar a SQL crudo si es necesario).
+*   **Evitar Stock Negativo:** La primera capa de defensa es la lógica de negocio en el Backend, pero la garantía real (la "última frontera") se define en la base de datos mediante un constraint explícito: `CONSTRAINT chk_stock_positivo CHECK (stock_actual >= 0)`.
+*   **Convivencia del Stack:** El ORM convive con el código de aplicación (FastAPI). Para el versionado de la estructura de la base de datos se utilizaría una herramienta de migraciones (como **Alembic**, que es parte del ecosistema de SQLAlchemy), garantizando que los cambios de esquema se apliquen de forma controlada en los distintos entornos. En este MVP inicial, la estructura base se carga mediante un script `init.sql` montado en el contenedor.
+
+### 2. Historial de Cambios y Escalabilidad
+*   **Auditoría de cambios (Nombre/Precio):** No guardaría la auditoría en la misma tabla del producto. Utilizaría una tabla dedicada (ej. `producto_auditoria`) o implementaría un enfoque de *Event Sourcing*, donde cada evento ("PrecioCambiado", "NombreModificado") se inserta en un log inmutable de base de datos.
+*   **Escalar a 500,000 productos y miles de movimientos:**
+    *   *Base de datos:* Implementaría **particionamiento de tablas** para `movimientos` (ej. particiones mensuales) para evitar que la tabla crezca infinitamente afectando el rendimiento de inserción.
+    *   *Caché:* Integraría **Redis** delante de la base de datos para almacenar temporalmente el listado de productos y su stock actual, ya que las lecturas serán mucho más frecuentes que las escrituras.
+    *   *Stock Histórico:* Para consultar el stock en una fecha pasada de forma eficiente, crearía un sistema de *Snapshots* (ej. guardar una foto del stock de cada producto al cierre de cada mes) y para consultar una fecha específica, tomaría el snapshot más cercano y le sumaría/restaría solo los movimientos de esos días de diferencia.
+
+### 3. Backend (Decisiones y Seguridad)
+*   **Deploy:** Dockerizado. Empaquetar la aplicación y sus dependencias (Vite/Nginx para front, FastAPI para back, Postgres para DB) en contenedores garantiza que funcione igual en local y en la nube (AWS/GCP).
+*   **Seguridad y Roles:** Implementaría autenticación basada en **JWT (JSON Web Tokens)**. Los roles (Admin, Operador) se guardan en la base de datos y se adjuntan como *claims* dentro del payload del token.
+*   **Protección de Endpoints:** Mediante dependencias de FastAPI (Decoradores de autorización), interceptando la petición, validando la firma del JWT y comprobando si el rol del usuario tiene el permiso necesario antes de ejecutar el controlador.
+*   **Contraseñas:** **Nunca** se guardan en texto plano. Se utilizaría un algoritmo de hashing fuerte con salt, como **Bcrypt** o **Argon2** (vía la librería `passlib` en Python).
+*   **Logs vs Auditoría:** Los logs de aplicación (errores técnicos, tiempos de respuesta, HTTP 500) irían a la salida estándar del contenedor (stdout) y serían recolectados por un sistema como Datadog o ELK. Esto es diferente a la auditoría de negocio (quién movió stock), que vive estructurada en tablas relacionales para ser consultada por los usuarios desde la interfaz.
+
+### 4. Frontend (Elección de Tecnología)
+*   **¿React o Streamlit?** Elegí **React**.
+*   **Contexto de uso:** Streamlit es excelente para prototipos rápidos de Data Science, paneles internos simples o cuando el equipo solo domina Python. Sin embargo, para un sistema transaccional robusto, React permite crear una **Single Page Application (SPA)** escalable, con control absoluto del ciclo de vida de los componentes, la gestión del estado global y el rendimiento (la carga gráfica recae en el cliente y no en el servidor).
+*   **Sacrificios:** Al elegir React, sacrifiqué la "velocidad de construcción inicial" y la simplicidad de tener todo en un solo lenguaje (Python), asumiendo el costo de mantener un repositorio separado, configurar Node/Vite y manejar llamadas asíncronas HTTP hacia la API.
+
+### 5. Uso de Inteligencia Artificial
+*   **Herramienta usada:** Se utilizó un asistente de línea de comandos potenciado por IA (Gemini).
+*   **Propósito puntual:**
+    *   Generar los scripts iniciales y la estructura *boilerplate* de Docker (Dockerfile multi-stage, docker-compose).
+    *   Documentar exhaustivamente el diseño técnico en formato Markdown (Arquitectura Hexagonal, UI/UX, Base de datos).
+    *   Refactorizar y organizar el código manteniendo las buenas prácticas recomendadas.
+*   **Cambio de decisión:** Inicialmente, sugerí usar scripts locales `.ini` para inicializar la base de datos. Sin embargo, analizando el contexto de un entorno automatizado, decidimos cambiar el rumbo y aprovechar las capacidades nativas de PostgreSQL en Docker (montando el `init.sql` directamente en el contenedor), eliminando así la necesidad de ejecutar comandos manuales en el entorno local del desarrollador.
