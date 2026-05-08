@@ -1,0 +1,14 @@
+# Entorno de Desarrollo
+services:
+  db:
+    ports:
+      - "5432:5432" # Expuesto para herramientas locales como DataGrip
+
+  backend:
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app # Hot-reload: los cambios locales se reflejan al instante
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    environment:
+      - SQLALCHEMY_ECHO=True # Ver consultas SQL en logs

@@ -1,0 +1,12 @@
+# Entorno de Producción
+services:
+  db:
+    # Sin puertos expuestos al host por seguridad
+    restart: always
+
+  backend:
+    restart: always
+    # Sin volúmenes montados (código inmutable dentro de la imagen)
+    environment:
+      - SQLALCHEMY_ECHO=False
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

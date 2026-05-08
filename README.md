@@ -25,17 +25,27 @@ El sistema está organizado en dominios independientes (Contextos Delimitados):
 
 ## 🛠️ Cómo Levantar el Proyecto
 
-El entorno está totalmente automatizado con Docker. Solo necesitás:
+El entorno está totalmente automatizado con Docker y soporta configuraciones específicas por entorno.
 
-1.  **Clonar el repositorio.**
-2.  **Configurar el entorno:**
-    ```bash
-    cp .env.example .env
-    ```
-3.  **Iniciar los servicios:**
-    ```bash
-    docker compose up -d --build
-    ```
+### 1. Clonar el repositorio y configurar el entorno
+\`\`\`bash
+cp .env.example .env
+\`\`\`
+
+### 2. Iniciar en Entorno de Desarrollo (Recomendado)
+Incluye **Hot-Reload** del código y exposición de la base de datos (puerto 5432) para herramientas locales.
+\`\`\`bash
+docker compose -f compose.yaml -f compose.dev.yaml up -d --build
+\`\`\`
+
+### 3. Iniciar en Entorno de Producción
+Configuración optimizada y segura (DB aislada, sin volúmenes de desarrollo).
+\`\`\`bash
+docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+\`\`\`
+
+El backend estará disponible en [http://localhost:8000](http://localhost:8000).
+
 
 El backend estará disponible en [http://localhost:8000](http://localhost:8000).
 Podés explorar la documentación interactiva (Swagger) en [http://localhost:8000/docs](http://localhost:8000/docs).
