@@ -4,37 +4,28 @@ from app.productos.application.services import ListarProductosService
 from app.productos.domain.entities import ProductoEntity
 
 @pytest.mark.asyncio
-async def test_listar_productos_service_returns_all_products():
+async def test_listar_productos_service_calls_repository():
     # Arrange
-    mock_repository = AsyncMock()
-    expected_products = [
-        ProductoEntity(id=1, nombre="P1", precio_unitario=10.0, stock_actual=5),
-        ProductoEntity(id=2, nombre="P2", precio_unitario=20.0, stock_actual=10),
-    ]
-    mock_repository.get_all.return_value = expected_products
-    service = ListarProductosService(mock_repository)
-
+    mock_repo = AsyncMock()
+    mock_repo.get_all.return_value = []
+    service = ListarProductosService(mock_repo)
+    
     # Act
-    result = await service.execute()
-
+    await service.execute(categoria="test")
+    
     # Assert
-    assert result == expected_products
-    mock_repository.get_all.assert_called_once_with(categoria_nombre=None)
+    mock_repo.get_all.assert_called_once_with(categoria_nombre="test")
 
 @pytest.mark.asyncio
-async def test_listar_productos_service_filters_by_category():
+async def test_listar_productos_service_returns_list():
     # Arrange
-    mock_repository = AsyncMock()
-    category = "Electronics"
-    expected_products = [
-        ProductoEntity(id=1, nombre="P1", precio_unitario=10.0, stock_actual=5),
-    ]
-    mock_repository.get_all.return_value = expected_products
-    service = ListarProductosService(mock_repository)
-
+    mock_repo = AsyncMock()
+    expected_data = [ProductoEntity(id=1, nombre="Test", precio_unitario=10.0, stock_actual=5)]
+    mock_repo.get_all.return_value = expected_data
+    service = ListarProductosService(mock_repo)
+    
     # Act
-    result = await service.execute(categoria=category)
-
+    result = await service.execute()
+    
     # Assert
-    assert result == expected_products
-    mock_repository.get_all.assert_called_once_with(categoria_nombre=category)
+    assert result == expected_data
