@@ -81,19 +81,13 @@ La experiencia (y también la teoria) me ha enseñado que subestimar un proyecto
    
    Tengo que diagramar el frontend para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de React o Streamlit. Propongo un entorno contenerizado multi-stage con docker y uso de nginx para tener un servidor de alto rendimiento, aprovechando que es reconocido por su bajo consumo de recursos y gran capacidad para gestionar múltiples conexiones simultáneas sirviendo contenido estático, orquestado con compose con un build tool como vite, react y typescript. Para tener control total de la ui/ux uso de scss. Una creación de tokens.scss a gustos personales o del cliente, para mis gustos personales prefiero estilos minimalistas que respeten las leyes ui/ux.
    Es mejor Streamlit de lo que yo propongo? Por qué?
-   ----------
+
    Teniendo en cuenta el contexto actual del proyecto, el stack definido y la configuración base ya existente, necesito implementar el dominio de "Gestión de Stock" (Productos, Categorías y Movimientos).
-
 Debes aplicar estrictamente un patrón de Separación de Capas (Services -> Custom Hooks -> Componentes) para no acoplar el estado del servidor en la UI.
-
 Genera el código para la siguiente estructura vertical, asegurando un tipado estricto:
-
     Tipos (src/types/stock.types.ts): Define las interfaces completas para Product, Category y Movement (tipo de movimiento: entrada/salida, fechas, cantidades), junto con sus DTOs para creación y edición.
-
     Capa de Servicios (src/services/stock.service.ts): Funciones puras que utilicen la instancia existente de Axios (apiClient) para el CRUD de estas tres entidades. Ninguna de estas funciones debe depender de React.
-
     Capa de Hooks / Orquestación (src/hooks/useStock.ts o separados por entidad): Crea los custom hooks utilizando TanStack Query (useQuery para lecturas, useMutation para escrituras). Asegúrate de configurar correctamente la invalidación de caché (ej. al registrar un Movement, se debe invalidar la caché de Product para refrescar el stock actual).
-
     Capa de Presentación (src/features/stock/StockDashboard.tsx o similar): Un componente contenedor principal que consuma estos hooks de forma limpia. Debe manejar los estados isLoading e isError delegados por TanStack Query y renderizar la información utilizando clases CSS, sin lógica de fetching directa ni useEffect.
 
 6. UI/UX:
