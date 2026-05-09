@@ -1,0 +1,26 @@
+<h2>Vista Principal: Tabla de Productos</h2>
+<p class="subtitle">¿Cómo estructuramos la vista principal para mostrar la lista de productos y sus detalles (como el gráfico de stock)? Según el diseño de UI/UX, buscamos una estética limpia tipo Linear/Notion.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Grilla + Panel Lateral (Drawer)</h3>
+      <p>Tabla limpia a ancho completo. Al hacer clic en un producto, se abre un panel lateral con el gráfico de stock y acciones detalladas. <strong>Recomendado:</strong> Mantiene la tabla principal limpia y permite ver muchos productos a la vez, encajando bien con la estética minimalista.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Vista Dividida (Master-Detail)</h3>
+      <p>Lista compacta de productos a la izquierda. A la derecha, un panel siempre visible con los detalles del producto seleccionado y su gráfico. Útil si el usuario necesita revisar los detalles de muchos productos de manera rápida.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Filas Desplegables (Expandable Rows)</h3>
+      <p>Tabla estándar. Al hacer clic, la fila se expande hacia abajo revelando el gráfico de stock y acciones. Es útil para interacciones rápidas, pero puede romper la limpieza visual de la tabla al desplegar mucha información.</p>
+    </div>
+  </div>
+</div>
