@@ -213,7 +213,8 @@ A continuación se responden las preguntas teóricas planteadas en la consigna d
 ### 5. Uso de Inteligencia Artificial
 *   **Herramienta usada:** Se utilizó **Gemini CLI**, una herramienta de inteligencia artificial integrada en la terminal.
 *   **Propósito puntual:**
-    *   **Orquestación de Tareas:** Se utilizó para la creación y gestión de la estructura de archivos, generación de *boilerplates* de Docker (Dockerfile multi-stage, docker-compose) y refactorización de código en tiempo real.
-    *   **Documentación Técnica:** Generación y refinamiento de documentos Markdown (Arquitectura Hexagonal, UI/UX, Base de Datos) asegurando coherencia técnica y profesionalismo.
-    *   **Investigación y Mejora:** Validación de decisiones arquitectónicas y optimización de scripts de inicialización.
+    *   **Adaptación Técnica:** El **CLI de Gemini** fue fundamental para facilitar la transición y adaptación a **FastAPI**. Viniendo de un entorno más familiarizado con **Laravel** y su sintaxis de Eloquent (ej. `with()->where()->`), la IA actuó como un guía experto para traducir esos conceptos a **SQLAlchemy** y los patrones asíncronos de Python.
+    *   **Orquestación de Tareas:** Se utilizó para la gestión de la estructura de archivos, generación de *boilerplates* de Docker (Dockerfile multi-stage, docker-compose) y refactorización de código en tiempo real.
+    *   **Documentación Técnica:** Generación y refinamiento de documentos Markdown asegurando coherencia técnica y profesionalismo.
+*   **Experiencia del Desarrollador:** La organización de carpetas y la orquestación con Docker resultaron ser conceptos familiares y accesibles, lo que permitió que la transición a Python fuera fluida. En todo momento, el CLI sirvió como un copiloto que orientó y guio el proyecto hacia la dirección deseada, permitiendo mantener el control creativo y arquitectónico mientras se aceleraba la curva de aprendizaje.
 *   **Cambio de decisión:** Inicialmente, el chat sugería usar scripts locales `.ini` para inicializar la base de datos. Sin embargo, a través del **CLI de Gemini**, decidimos cambiar el rumbo y aprovechar las capacidades nativas de PostgreSQL en Docker (montando el `init.sql` directamente en el contenedor), eliminando así la necesidad de ejecutar comandos manuales en el entorno local del desarrollador.
