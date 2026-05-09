@@ -5,6 +5,8 @@ Este documento describe la arquitectura, el proceso de diseño y las especificac
 ## Índice
 
 1. [Análisis y Prompts Iniciales](#1-análisis-y-prompts-iniciales)
+   - [Pensando el problema](#pensando-el-problema)
+   - [Hoja de Ruta de Implementación](#hoja-de-ruta-de-implementación)
 2. [Especificaciones de Diseño](#2-especificaciones-de-diseño)
    - [Infraestructura y Orquestación](#infraestructura-y-orquestación)
    - [Base de Datos Relacional](#base-de-datos-relacional)
@@ -83,6 +85,15 @@ Es mejor Streamlit de lo que yo propongo? Por qué?
 5. UI/UX:
 
 Tengo que diagramar la UI/UX para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de .scss. Propongo un estilo minimalista, que siga un pulido quirurgico, estructura para distintas resoluciones desde dispositivos moviles, tablets y monitores y una estructura de tokens.scss como variables principales que los demás componentes scss tomarán como base para su creación. Los mismos deberan seguir las leyes principales ui/ux, como colores de los semaforos para alertar, llamar la atención o mostras que está todo bien.
+
+### Hoja de Ruta de Implementación
+
+Tras definir la estrategia mediante los prompts iniciales, la ejecución del proyecto se realizó de manera incremental y metódica, siguiendo estos pasos:
+
+1.  **Orquestación y Persistencia:** Configuración inicial de Docker y Docker Compose para levantar el servicio de base de datos (PostgreSQL), garantizando un entorno de datos estable desde el comienzo.
+2.  **Núcleo del Sistema (Back-end):** Creación y contenedorización del servicio FastAPI, estableciendo la conexión asíncrona con la base de datos y validando la comunicación entre servicios.
+3.  **Interfaz y Experiencia (Front-end):** Integración del servicio de React + Vite, configurando el servidor Nginx y desarrollando la arquitectura de estilos (UI/UX) sobre una base técnica ya conectada.
+4.  **Lógica de Negocio y Requerimientos:** Implementación final de los endpoints, filtros y reglas de negocio detalladas en la consigna, trabajando sobre un sistema integral y funcional.
 
 ## 2. Especificaciones de Diseño
 
