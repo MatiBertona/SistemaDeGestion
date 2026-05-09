@@ -1,0 +1,122 @@
+@import '../../styles/tokens';
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--text-primary, #{$slate-50});
+  font-size: 14px;
+  background: var(--glass-bg, #{$glass-bg});
+  backdrop-filter: blur(var(--glass-blur, #{$glass-blur}));
+  border: 1px solid var(--glass-border, #{$glass-border});
+  border-radius: var(--radius-default, #{$radius-md});
+  overflow: hidden;
+
+  thead {
+    tr {
+      th {
+        text-align: left;
+        padding: $space-md;
+        color: $text-soft;
+        font-weight: 500;
+        border-bottom: 1px solid $border-soft;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 0.05em;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      td {
+        padding: $space-md;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        vertical-align: middle;
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+
+      &.critical {
+        background-color: $bg-critical;
+        &:hover {
+          background-color: rgba(239, 68, 68, 0.1);
+        }
+      }
+
+      &.low {
+        background-color: $bg-low;
+        &:hover {
+          background-color: rgba(245, 158, 11, 0.1);
+        }
+      }
+    }
+  }
+}
+
+.name {
+  font-weight: 600;
+  color: var(--text-primary, #{$slate-50});
+  margin-bottom: 2px;
+}
+
+.sku {
+  font-size: 12px;
+  color: $text-soft;
+  font-family: monospace;
+}
+
+.categoryBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: $text-soft;
+}
+
+.statusBadgeCritical {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(239, 68, 68, 0.12);
+  color: $status-critical;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.statusBadgeLow {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(245, 158, 11, 0.12);
+  color: $status-low;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.statusHealthy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: $status-healthy;
+  font-size: 12px;
+  font-weight: 500;
+}
