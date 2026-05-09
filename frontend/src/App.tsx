@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ProductTable } from './components/inventory/ProductTable';
 import { ProductDrawer } from './components/inventory/ProductDrawer';
-import type { Product } from './types/inventory';
+import { MovementModal } from './components/inventory/MovementModal';
+import type { Product, StockMovement } from './types/inventory';
 import './App.scss';
 
 const MOCK_PRODUCTS: Product[] = [
@@ -15,8 +16,9 @@ const MOCK_PRODUCTS: Product[] = [
 const CATEGORIES = ['Todos', 'Electrónica', 'Accesorios', 'Mobiliario'];
 
 function App() {
-  const [products] = useState<Product[]>(MOCK_PRODUCTS);
+  const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isMovementModalOpen, setIsMovementModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -34,6 +36,35 @@ function App() {
       return matchesSearch && matchesCategory;
     });
   }, [products, searchTerm, selectedCategory]);
+
+  const handleMovementSubmit = (movement: Omit<StockMovement, 'id' | 'date'>) => {
+    // Simulamos la actualización del stock
+    setProducts(prev => prev.map(p => {
+      if (p.id === movement.product_id) {
+        const newStock = movement.type === 'ENTRADA' 
+          ? p.stock_actual + movement.amount 
+          : p.stock_actual - movement.amount;
+        
+        return { ...p, stock_actual: newStock };
+      }
+      return p;
+    }));
+
+    // Actualizar también el producto seleccionado si está abierto en el Drawer
+    if (selectedProduct && selectedProduct.id === movement.product_id) {
+      const newStock = movement.type === 'ENTRADA' 
+        ? selectedProduct.stock_actual + movement.amount 
+        : selectedProduct.stock_actual - movement.amount;
+      setSelectedProduct({ ...selectedProduct, stock_actual: newStock });
+    }
+
+    setIsMovementModalOpen(false);
+  };
+
+  const handleQuickMovement = (product: Product) => {
+    setSelectedProduct(product);
+    setIsMovementModalOpen(true);
+  };
 
   return (
     <div className="appWrapper">
@@ -125,6 +156,7 @@ function App() {
               <ProductTable 
                 products={filteredProducts} 
                 onSelect={setSelectedProduct} 
+                onQuickMovement={handleQuickMovement}
               />
             ) : (
               <div className="emptyState">
@@ -144,8 +176,16 @@ function App() {
       <ProductDrawer 
         product={selectedProduct} 
         onClose={() => setSelectedProduct(null)}
-        onMovement={() => console.log('Abrir Modal Movimiento')}
+        onMovement={() => setIsMovementModalOpen(true)}
       />
+
+      {isMovementModalOpen && selectedProduct && (
+        <MovementModal 
+          product={selectedProduct} 
+          onClose={() => setIsMovementModalOpen(false)} 
+          onSubmit={handleMovementSubmit} 
+        />
+      )}
     </div>
   );
 }

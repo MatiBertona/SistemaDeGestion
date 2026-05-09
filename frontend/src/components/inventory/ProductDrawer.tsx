@@ -85,7 +85,7 @@ export const ProductDrawer: FC<Props> = ({ product, onClose, onMovement }) => {
         </div>
 
         <footer className={styles.footer}>
-          <button className={styles.btnBlue} onClick={onMovement}>
+          <button className={styles.btnBlue} onClick={() => onMovement()}>
             Registrar Movimiento
           </button>
           <button className={styles.btnGhost} onClick={onClose}>

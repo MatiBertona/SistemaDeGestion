@@ -1,0 +1,222 @@
+@import '../../styles/tokens';
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  z-index: $z-modal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn var(--mot-quick);
+  padding: var(--rad-xl);
+}
+
+.modalContent {
+  background: var(--sys-surface);
+  width: 100%;
+  max-width: 480px;
+  border-radius: var(--rad-xl);
+  box-shadow: var(--elev-lg);
+  overflow: hidden;
+  border: 0.5px solid var(--sep-standard);
+  animation: scaleIn var(--mot-standard);
+}
+
+.modalHeader {
+  padding: 24px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: $f-weight-bold;
+    letter-spacing: -0.02em;
+    color: var(--txt-primary);
+  }
+}
+
+.closeBtn {
+  background: var(--sys-surface-hover);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--rad-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--txt-secondary);
+  cursor: pointer;
+  transition: var(--mot-quick);
+
+  &:active {
+    transform: scale(0.9);
+    background: var(--sys-surface-active);
+  }
+}
+
+.modalBody {
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 13px;
+    font-weight: $f-weight-semibold;
+    color: var(--txt-secondary);
+  }
+}
+
+.inputField {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--sys-surface-hover);
+  border: 1px solid transparent;
+  border-radius: var(--rad-md);
+  font-size: 15px;
+  color: var(--txt-primary);
+  transition: var(--mot-quick);
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    background: var(--sys-surface);
+    border-color: var(--brand-primary);
+    box-shadow: var(--elev-focus);
+  }
+
+  &.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  &.error {
+    border-color: var(--stat-danger);
+    background: var(--stat-danger-bg);
+    color: var(--stat-danger);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.2);
+    }
+  }
+}
+
+textarea.inputField {
+  resize: vertical;
+  min-height: 80px;
+}
+
+// iOS Segmented Control
+.segmentedControl {
+  display: flex;
+  background: var(--sys-surface-hover);
+  padding: 2px;
+  border-radius: 9px;
+  position: relative;
+  
+  button {
+    flex: 1;
+    padding: 6px 0;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: $f-weight-semibold;
+    color: var(--txt-secondary);
+    cursor: pointer;
+    border-radius: 7px;
+    transition: var(--mot-quick);
+    z-index: 1;
+
+    &.active {
+      color: var(--txt-primary);
+      background: var(--sys-surface);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 3px 1px rgba(0, 0, 0, 0.04);
+    }
+  }
+}
+
+.validationHint {
+  font-size: 12px;
+  color: var(--txt-muted);
+  display: flex;
+  justify-content: space-between;
+  
+  .errorText {
+    color: var(--stat-danger);
+    font-weight: $f-weight-medium;
+  }
+  
+  .resultText {
+    font-weight: $f-weight-semibold;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.modalFooter {
+  padding: 16px 24px;
+  background: var(--sys-surface-variant);
+  border-top: 0.5px solid var(--sep-standard);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: var(--rad-sm);
+  font-size: 14px;
+  font-weight: $f-weight-semibold;
+  cursor: pointer;
+  transition: var(--mot-quick);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btnPrimary {
+  @extend .btn;
+  background: var(--brand-primary);
+  color: var(--txt-inverse);
+  box-shadow: 0 2px 8px var(--brand-primary-alpha-bold);
+}
+
+.btnSecondary {
+  @extend .btn;
+  background: transparent;
+  color: var(--brand-primary);
+  
+  &:hover {
+    background: var(--brand-primary-alpha);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
