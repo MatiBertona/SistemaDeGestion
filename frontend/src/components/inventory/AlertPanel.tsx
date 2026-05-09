@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { Product } from '../../types/stock.types';
 import styles from '../../styles/components/inventory/AlertPanel.module.scss';
 
@@ -9,39 +9,70 @@ interface Props {
 export const AlertPanel: React.FC<Props> = ({ products }) => {
   const critical = products.filter(p => p.stock_actual === 0);
   const low = products.filter(p => p.stock_actual <= p.min_stock && p.stock_actual > 0);
+  const allAlerts = [...critical, ...low];
+
+  // Cálculo Analítico: Risk Index (0-100)
+  const riskIndex = useMemo(() => {
+    if (products.length === 0) return 0;
+    const score = (critical.length * 2 + low.length * 1) / (products.length * 2);
+    return Math.min(Math.round(score * 100), 100);
+  }, [critical, low, products]);
+
+  const getStatusColor = () => {
+    if (riskIndex > 40) return 'var(--stat-danger)';
+    if (riskIndex > 15) return 'var(--stat-warning)';
+    return 'var(--stat-success)';
+  };
 
   return (
     <div className={styles.panelContainer}>
-      <h3 className={styles.title}>Alertas de Inventario</h3>
-      <div className={styles.alertList}>
-        {critical.length === 0 && low.length === 0 && (
-          <p className={styles.emptyMsg}>No hay alertas pendientes</p>
+      <header className={styles.header}>
+        <div className={styles.titleGroup}>
+          <h3>Notificaciones Críticas</h3>
+          <div className={styles.riskBadge} style={{ '--risk-color': getStatusColor() } as any}>
+            Riesgo: {riskIndex}%
+          </div>
+        </div>
+        {allAlerts.length > 0 && (
+          <span className={styles.badgeCount}>{allAlerts.length}</span>
         )}
-        
-        {critical.map(p => (
-          <div key={p.id} className={`${styles.alertCard} ${styles.alertCardCritical}`}>
-            <div className={styles.productInfo}>
-              <span className={styles.productName}>{p.name}</span>
-              <span className={styles.productSku}>{p.sku}</span>
+      </header>
+      
+      <div className={styles.alertList}>
+        {allAlerts.length === 0 ? (
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIcon}>
+               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             </div>
-            <div className={styles.stockInfo}>
-              <span className={styles.stockValue}>STOCK: {p.stock_actual}</span>
-            </div>
+            <p>Operación Estable</p>
+            <span>No se detectaron quiebres de stock.</span>
           </div>
-        ))}
-
-        {low.map(p => (
-          <div key={p.id} className={`${styles.alertCard} ${styles.alertCardLow}`}>
-            <div className={styles.productInfo}>
-              <span className={styles.productName}>{p.name}</span>
-              <span className={styles.productSku}>{p.sku}</span>
-            </div>
-            <div className={styles.stockInfo}>
-              <span className={styles.stockValue}>STOCK: {p.stock_actual}</span>
-            </div>
-          </div>
-        ))}
+        ) : (
+          allAlerts.map(p => {
+            const isCritical = p.stock_actual === 0;
+            return (
+              <div key={p.id} className={styles.alertItem}>
+                <div className={styles.itemMain}>
+                  <div className={`${styles.dot} ${isCritical ? styles.dotCritical : styles.dotLow}`} />
+                  <div className={styles.itemInfo}>
+                    <span className={styles.name}>{p.name}</span>
+                    <span className={styles.sku}>{p.sku}</span>
+                  </div>
+                </div>
+                <div className={`${styles.stockBadge} ${isCritical ? styles.stockCritical : styles.stockLow}`}>
+                   {p.stock_actual}
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
+      
+      {allAlerts.length > 0 && (
+        <footer className={styles.footer}>
+          <span>Requiere atención inmediata en {allAlerts.length} productos</span>
+        </footer>
+      )}
     </div>
   );
 };

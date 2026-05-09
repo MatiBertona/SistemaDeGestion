@@ -42,8 +42,8 @@ $ref-gray-950: #1C1C1E;
 
     // Borders & Dividers
     --sep-light: #{rgba($ref-black, 0.05)};
-    --sep-standard: #{rgba($ref-black, 0.1)};
-    --sep-strong: #{rgba($ref-black, 0.15)};
+    --sep-standard: #{rgba($ref-black, 0.08)};
+    --sep-strong: #{rgba($ref-black, 0.12)};
     
     // Typography
     --txt-primary: #{$ref-black};
@@ -57,55 +57,61 @@ $ref-gray-950: #1C1C1E;
     --stat-warning: #{$ref-orange};
     --stat-danger: #{$ref-red};
     
-    --stat-success-bg: #{rgba($ref-green, 0.1)};
-    --stat-warning-bg: #{rgba($ref-orange, 0.1)};
-    --stat-danger-bg: #{rgba($ref-red, 0.1)};
+    --stat-success-alpha: #{rgba($ref-green, 0.1)};
+    --stat-warning-alpha: #{rgba($ref-orange, 0.1)};
+    --stat-danger-alpha: #{rgba($ref-red, 0.1)};
 
-    // Elevation & Depth
-    --elev-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-    --elev-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-    --elev-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
-    --elev-focus: 0 0 0 3px #{rgba($ref-blue, 0.1)};
+    // Elevation & Depth (Premium Multi-layer)
+    --elev-sm: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.04);
+    --elev-md: 0 4px 6px rgba(0,0,0,0.03), 0 12px 24px rgba(0,0,0,0.06);
+    --elev-lg: 0 8px 16px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.1);
+    --elev-focus: 0 0 0 3px #{rgba($ref-blue, 0.15)};
     
+    // Gradients (Premium Accents)
+    --grad-blue: linear-gradient(135deg, #007AFF 0%, #0056B3 100%);
+    --grad-red: linear-gradient(135deg, #FF3B30 0%, #C41E14 100%);
+    --grad-orange: linear-gradient(135deg, #FF9500 0%, #E67600 100%);
+    --grad-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+
     // Geometry
     --rad-sm: 8px;
-    --rad-md: 12px;
+    --rad-md: 14px;
     --rad-lg: 20px;
-    --rad-xl: 24px;
+    --rad-xl: 28px;
     --rad-pill: 999px;
 
     // Motion
-    --mot-standard: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    --mot-quick: all 0.2s ease;
+    --mot-standard: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    --mot-quick: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     
     // Z-Layers
     --z-sticky: 1000;
     --z-modal: 2000;
     --z-tooltip: 3000;
-    
-    // Scrollbar
-    --sb-thumb: #{rgba($ref-black, 0.1)};
-    --sb-thumb-hover: #{rgba($ref-black, 0.2)};
 }
 
 [data-theme="dark"] {
     --sys-bg: #{$ref-black};
-    --sys-surface: #{$ref-gray-950};
-    --sys-surface-elevated: #{$ref-gray-900};
-    --sys-surface-variant: #{$ref-gray-800};
-    --sys-surface-alpha: #{rgba($ref-gray-950, 0.8)};
+    --sys-surface: #121212;
+    --sys-surface-elevated: #1C1C1E;
+    --sys-surface-variant: #2C2C2E;
+    --sys-surface-alpha: #{rgba(18, 18, 18, 0.8)};
     --sys-surface-hover: #{rgba($ref-white, 0.05)};
     --sys-surface-active: #{rgba($ref-white, 0.08)};
 
-    --sep-light: #{rgba($ref-white, 0.1)};
-    --sep-standard: #{rgba($ref-white, 0.15)};
+    --sep-light: #{rgba($ref-white, 0.08)};
+    --sep-standard: #{rgba($ref-white, 0.12)};
+    --sep-strong: #{rgba($ref-white, 0.18)};
     
     --txt-primary: #{$ref-white};
-    --txt-secondary: #{$ref-gray-200};
+    --txt-secondary: #{$ref-gray-400};
     --txt-muted: #{$ref-gray-500};
-    
-    --sb-thumb: #{rgba($ref-white, 0.2)};
-    --sb-thumb-hover: #{rgba($ref-white, 0.3)};
+
+    --elev-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --elev-md: 0 12px 24px rgba(0, 0, 0, 0.3);
+    --elev-lg: 0 24px 48px rgba(0, 0, 0, 0.4);
+
+    --grad-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
 }
 
 // =========================================
@@ -123,19 +129,19 @@ $color-success: var(--stat-success);
 $color-warning: var(--stat-warning);
 $color-danger: var(--stat-danger);
 
-$space-xl: 2.5rem;
-$space-lg: 1.5rem;
-$space-md: 1rem;
-$space-sm: 0.75rem;
+$space-xl: 3rem;
+$space-lg: 2rem;
+$space-md: 1.25rem;
+$space-sm: 0.875rem;
 $space-xs: 0.5rem;
 $space-xxs: 0.25rem;
 
-$f-size-xl: 2.25rem;
-$f-size-lg: 1.5rem;
-$f-size-md: 1rem;
-$f-size-sm: 0.9375rem;
-$f-size-xs: 0.8125rem;
-$f-size-xxs: 0.6875rem;
+$f-size-xl: 2.5rem;
+$f-size-lg: 1.75rem;
+$f-size-md: 1.125rem;
+$f-size-sm: 1rem;
+$f-size-xs: 0.875rem;
+$f-size-xxs: 0.75rem;
 
 $f-weight-bold: 800;
 $f-weight-semibold: 600;
