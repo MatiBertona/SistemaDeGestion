@@ -27,8 +27,8 @@ Se implementó un build en dos etapas para optimizar la imagen final:
 
 ### ¿Por qué Nginx?
 - **Eficiencia:** Nginx es uno de los servidores web más rápidos del mundo para servir contenido estático.
-- **Ligereza:** La imagen final es significativamente más pequeña comparada con una que incluya Node.js en tiempo de ejecución.
-- **Seguridad:** Reduce la superficie de ataque al no exponer el entorno de ejecución de Node.js al exterior.
+- **Ligereza:** La imagen final (`nginx:alpine`) es significativamente más pequeña comparada con una que incluya Node.js en tiempo de ejecución.
+- **Seguridad:** Reduce la superficie de ataque al no exponer el entorno de ejecución de Node.js al exterior, sirviendo únicamente los archivos compilados en el puerto 80.
 
 ## 5. Fuentes Oficiales y Referencias
 Para profundizar en las bondades de estas tecnologías, se consultó la documentación oficial:

@@ -79,9 +79,8 @@ La experiencia (y también la teoria) me ha enseñado que subestimar un proyecto
 
 4. Front:
 
-   Tengo que diagramar el frontend para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de React o Streamlit. Propongo un entorno contenerizado multi-stage con docker y uso de nginx para tener un servidor de alto rendimiento, aprovechar el uso del proxy inverso y balanceador de carga de código abierto, y como intermediario seguro (proxy) para redirigir peticiones a un servidor backend y orquestado con compose con un build tool como vite, react y typescript. Para tener control total de la ui/ux uso de scss, para aprovechar nginx que es reconocido por su bajo consumo de recursos y gran capacidad para gestionar múltiples conexiones simultáneas. Una creación de tokens.scss a gustos personales o del cliente, para mis gustos personales prefiero estilos minimalistas que respeten las leyes ui/ux
-   Es mejor Streamlit de lo que yo propongo? Por qué?
-
+Tengo que diagramar el frontend para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de React o Streamlit. Propongo un entorno contenerizado multi-stage con docker y uso de nginx para tener un servidor de alto rendimiento, aprovechando que es reconocido por su bajo consumo de recursos y gran capacidad para gestionar múltiples conexiones simultáneas sirviendo contenido estático, orquestado con compose con un build tool como vite, react y typescript. Para tener control total de la ui/ux uso de scss. Una creación de tokens.scss a gustos personales o del cliente, para mis gustos personales prefiero estilos minimalistas que respeten las leyes ui/ux.
+Es mejor Streamlit de lo que yo propongo? Por qué?
 5. UI/UX:
 
    Tengo que diagramar la UI/UX para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de .scss. Propongo un estilo minimalista, que siga un pulido quirurgico, estructura para distintas resoluciones desde dispositivos moviles, tablets y monitores y una estructura de tokens.scss como variables principales que los demás componentes scss tomarán como base para su creación. Los mismos deberan seguir las leyes principales ui/ux, como colores de los semaforos para alertar, llamar la atención o mostras que está todo bien.
@@ -160,7 +159,8 @@ Una vez iniciados los contenedores, los servicios estarán disponibles en:
 
 - **Backend API:** http://localhost:8000
 - **Documentación interactiva (Swagger):** http://localhost:8000/docs
-- **Frontend:** http://localhost:80
+- **Frontend (Desarrollo):** http://localhost:5173
+- **Frontend (Producción):** http://localhost:80
 
 ### 5. Ejecución de Pruebas
 
