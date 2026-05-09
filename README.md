@@ -19,6 +19,7 @@ Este documento describe la arquitectura, el proceso de diseño y las especificac
    - [4. Acceso a los Servicios](#4-acceso-a-los-servicios)
    - [5. Ejecución de Pruebas](#5-ejecución-de-pruebas)
 5. [Referencias y Documentación](#5-referencias-y-documentación)
+6. [Respuestas a Preguntas Conceptuales (Evaluación)](#6-respuestas-a-preguntas-conceptuales-evaluación)
 
 ## 1. Análisis y Prompts Iniciales
 
@@ -202,7 +203,7 @@ A continuación se responden las preguntas teóricas planteadas en la consigna d
 *   **Seguridad y Roles:** Implementaría autenticación basada en **JWT (JSON Web Tokens)**. Los roles (Admin, Operador) se guardan en la base de datos y se adjuntan como *claims* dentro del payload del token.
 *   **Protección de Endpoints:** Mediante dependencias de FastAPI (Decoradores de autorización), interceptando la petición, validando la firma del JWT y comprobando si el rol del usuario tiene el permiso necesario antes de ejecutar el controlador.
 *   **Contraseñas:** **Nunca** se guardan en texto plano. Se utilizaría un algoritmo de hashing fuerte con salt, como **Bcrypt** o **Argon2** (vía la librería `passlib` en Python).
-*   **Logs vs Auditoría:** Los logs de aplicación (errores técnicos, tiempos de respuesta, HTTP 500) irían a la salida estándar del contenedor (stdout) y serían recolectados por un sistema como Datadog o ELK. Esto es diferente a la auditoría de negocio (quién movió stock), que vive estructurada en tablas relacionales para ser consultada por los usuarios desde la interfaz.
+*   **Logs vs Auditoría:** Los logs de aplicación (errores técnicos, tiempos de respuesta, HTTP 500) irían a la salida estándar del contenedor (stdout) y serían recolectados por un sistema como Datadog o ELK, utilizando **Grafana** para la visualización y alertas de métricas críticas. Esto es diferente a la auditoría de negocio (quién movió stock), que vive estructurada en tablas relacionales para ser consultada por los usuarios desde la interfaz.
 
 ### 4. Frontend (Elección de Tecnología)
 *   **¿React o Streamlit?** Elegí **React**.
@@ -210,9 +211,9 @@ A continuación se responden las preguntas teóricas planteadas en la consigna d
 *   **Sacrificios:** Al elegir React, sacrifiqué la "velocidad de construcción inicial" y la simplicidad de tener todo en un solo lenguaje (Python), asumiendo el costo de mantener un repositorio separado, configurar Node/Vite y manejar llamadas asíncronas HTTP hacia la API.
 
 ### 5. Uso de Inteligencia Artificial
-*   **Herramienta usada:** Se utilizó un asistente de línea de comandos potenciado por IA (Gemini).
+*   **Herramienta usada:** Se utilizó **Gemini CLI**, una herramienta de inteligencia artificial integrada en la terminal.
 *   **Propósito puntual:**
-    *   Generar los scripts iniciales y la estructura *boilerplate* de Docker (Dockerfile multi-stage, docker-compose).
-    *   Documentar exhaustivamente el diseño técnico en formato Markdown (Arquitectura Hexagonal, UI/UX, Base de datos).
-    *   Refactorizar y organizar el código manteniendo las buenas prácticas recomendadas.
-*   **Cambio de decisión:** Inicialmente, sugerí usar scripts locales `.ini` para inicializar la base de datos. Sin embargo, analizando el contexto de un entorno automatizado, decidimos cambiar el rumbo y aprovechar las capacidades nativas de PostgreSQL en Docker (montando el `init.sql` directamente en el contenedor), eliminando así la necesidad de ejecutar comandos manuales en el entorno local del desarrollador.
+    *   **Orquestación de Tareas:** Se utilizó para la creación y gestión de la estructura de archivos, generación de *boilerplates* de Docker (Dockerfile multi-stage, docker-compose) y refactorización de código en tiempo real.
+    *   **Documentación Técnica:** Generación y refinamiento de documentos Markdown (Arquitectura Hexagonal, UI/UX, Base de Datos) asegurando coherencia técnica y profesionalismo.
+    *   **Investigación y Mejora:** Validación de decisiones arquitectónicas y optimización de scripts de inicialización.
+*   **Cambio de decisión:** Inicialmente, el chat sugería usar scripts locales `.ini` para inicializar la base de datos. Sin embargo, a través del **CLI de Gemini**, decidimos cambiar el rumbo y aprovechar las capacidades nativas de PostgreSQL en Docker (montando el `init.sql` directamente en el contenedor), eliminando así la necesidad de ejecutar comandos manuales en el entorno local del desarrollador.
