@@ -34,57 +34,57 @@ Para organizar todo esto, inicié una búsqueda con prompts orientativos en el c
 La experiencia (y también la teoria) me ha enseñado que subestimar un proyecto y optar por herramientas "empaquetadas" o demasiado simples suele traer problemas graves de escalabilidad cuando los requerimientos cambian. A continuación, adjunto los prompts iniciales que utilicé para guiar estas primeras decisiones, divididos por las áreas claves del sistema:
 
 1. Deployment/Orquestación/Infraestructura:
-
-Tengo que diagramar una arquitectura para un sistema de gestión de stock, donde se me pide una base de datos relacional SQL (producto-categoria-movimientos-hitorial) preferentemente postgres sql, un back-end preferentemente Python, front-end preferentemente React, mi propuesta inicial es hacer uso de Dockerfiles Multi-stage builds para el frontend y el backend, considerado un nginx para el front. Orquestado por un Compose, el mismo tendrá las conexiónes de red y los volumenes necesarios para los datos/logs/archivos, además de un uso importante del .env y multiples compose.yaml: uno para producción y otro para desarrollo. Inicialización de la base de datos con el script `init.sql` en la carpeta `basededatos/` para el entorno de desarrollo y/o local.
+   
+   Tengo que diagramar una arquitectura para un sistema de gestión de stock, donde se me pide una base de datos relacional SQL (producto-categoria-movimientos-hitorial) preferentemente postgres sql, un back-end preferentemente Python,    front-end preferentemente React, mi propuesta inicial es hacer uso de Dockerfiles Multi-stage builds para el frontend y el backend, considerado un nginx para el front. Orquestado por un Compose, el mismo tendrá las conexiónes de red    y los volumenes necesarios para los datos/logs/archivos, además de un uso importante del .env y multiples compose.yaml: uno para producción y otro para desarrollo. Inicialización de la base de datos con el script `init.sql` en la       carpeta `basededatos/` para el entorno de desarrollo y/o local.
 
 2. Base de datos:
+   
+   Tengo que diagramar una base de datos para un sistema de gestión de stock, donde se me pide una base de datos relacional SQL (producto-categoria-movimientos-hitorial) para transacciones en PostgreSQL, con usuarios separados para    desarrollo y producción y permisos diferenciados, para evitar los DELETE en la base de datos de producción. Además, contemplar migraciones (me surge acá recordar sobre migraciones) y volúmenes para asegurar la consistencia de los    datos. Script inicial para correr los contenedores con datos:
 
-Tengo que diagramar una base de datos para un sistema de gestión de stock, donde se me pide una base de datos relacional SQL (producto-categoria-movimientos-hitorial) para transacciones en PostgreSQL, con usuarios separados para desarrollo y producción y permisos diferenciados, para evitar los DELETE en la base de datos de producción. Además, contemplar migraciones (me surge acá recordar sobre migraciones) y volúmenes para asegurar la consistencia de los datos. Script inicial para correr los contenedores con datos:
-
-```sql
-
-     -- 1. Crear la tabla de Categorías
-    CREATE TABLE categoria (     
-        id SERIAL PRIMARY KEY,     
-        nombre VARCHAR(100) NOT NULL,     
-        descripcion TEXT  );
-    -- 2. Crear la tabla de Productos
-    CREATE TABLE producto (     
-        id SERIAL PRIMARY KEY,     
-        nombre VARCHAR(150) NOT NULL,     
-        categoria_id INTEGER NOT NULL,     
-        precio_unitario NUMERIC(12, 2) NOT NULL DEFAULT 0.00,      stock_actual INTEGER NOT NULL DEFAULT 0,                
-        CONSTRAINT fk_categoria FOREIGN KEY (categoria_id) REFERENCES categoria(id) ON DELETE RESTRICT
-        );
-    -- 3. Crear la tabla de Movimientos
-    CREATE TABLE movimiento (     
-        id SERIAL PRIMARY KEY,     
-        producto_id INTEGER NOT NULL,     
-         tipo VARCHAR(10) NOT NULL,
-         -- entrada o salida     
-        cantidad INTEGER NOT NULL,     
-        fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     
-        motivo VARCHAR(255),     
-        usuario VARCHAR(100),
-    CONSTRAINT check_tipo_movimiento          
-    CHECK (tipo IN ('entrada', 'salida')),           
-    -- Relación con la tabla producto     
-    CONSTRAINT fk_producto FOREIGN KEY (producto_id)  REFERENCES producto(id) ON DELETE CASCADE  );
-```
+   ```sql
+   
+        -- 1. Crear la tabla de Categorías
+       CREATE TABLE categoria (     
+           id SERIAL PRIMARY KEY,     
+           nombre VARCHAR(100) NOT NULL,     
+           descripcion TEXT  );
+       -- 2. Crear la tabla de Productos
+       CREATE TABLE producto (     
+           id SERIAL PRIMARY KEY,     
+           nombre VARCHAR(150) NOT NULL,     
+           categoria_id INTEGER NOT NULL,     
+           precio_unitario NUMERIC(12, 2) NOT NULL DEFAULT 0.00,      stock_actual INTEGER NOT NULL DEFAULT 0,                
+           CONSTRAINT fk_categoria FOREIGN KEY (categoria_id) REFERENCES categoria(id) ON DELETE RESTRICT
+           );
+       -- 3. Crear la tabla de Movimientos
+       CREATE TABLE movimiento (     
+           id SERIAL PRIMARY KEY,     
+           producto_id INTEGER NOT NULL,     
+            tipo VARCHAR(10) NOT NULL,
+            -- entrada o salida     
+           cantidad INTEGER NOT NULL,     
+           fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     
+           motivo VARCHAR(255),     
+           usuario VARCHAR(100),
+       CONSTRAINT check_tipo_movimiento          
+       CHECK (tipo IN ('entrada', 'salida')),           
+       -- Relación con la tabla producto     
+       CONSTRAINT fk_producto FOREIGN KEY (producto_id)  REFERENCES producto(id) ON DELETE CASCADE  );
+   ```
 
 3. Back End:
 
-Tengo que diagramar el back-end para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de Python (Fast-Api). Propongo una estructura del mismo siguiendo Clean Architecture / Arquitectura Hexagonal separando el núcleo del negocio en el dominio con sus respectivos modelos, repositorios y servicios y el mecanismo de presentación http donde convivan los controllers, request, resources entre otros. Como se trabaja en Fast-Api con esta estructura?
-En el mismo me proponen un sistema de login donde haya roles, perfiles y contraseñas. Mi propuesta, siguiendo la arquitectura mencionada; implementaria las tablas en la base de datos de usuarios, roles, perfiles con sus respectivas relaciones. Para las contraseñas usuaria algún metodo de encriptación o hashing ¿Qué alternativas me propones para estó último ? Como puedo proteger los endpoint según el rol del usuario? Se me ocurre plantear a nivel front end un bloqueo de opciónes, es decir, ciertas opciones serán visibles para ciertos roles, ejemplo: admin podrá ver la opción de borrar, pero un operador no.
+   Tengo que diagramar el back-end para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de Python (Fast-Api). Propongo una estructura del mismo siguiendo Clean Architecture / Arquitectura    Hexagonal separando el núcleo del negocio en el dominio con sus respectivos modelos, repositorios y servicios y el mecanismo de presentación http donde convivan los controllers, request, resources entre otros. Como se trabaja en Fast-   Api con esta estructura?
+   En el mismo me proponen un sistema de login donde haya roles, perfiles y contraseñas. Mi propuesta, siguiendo la arquitectura mencionada; implementaria las tablas en la base de datos de usuarios, roles, perfiles con sus respectivas    relaciones. Para las contraseñas usuaria algún metodo de encriptación o hashing ¿Qué alternativas me propones para estó último ? Como puedo proteger los endpoint según el rol del usuario? Se me ocurre plantear a nivel front end un    bloqueo de opciónes, es decir, ciertas opciones serán visibles para ciertos roles, ejemplo: admin podrá ver la opción de borrar, pero un operador no.
 
 4. Front:
 
-Tengo que diagramar el frontend para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de React o Streamlit. Propongo un entorno contenerizado multi-stage con docker y uso de nginx para tener un servidor de alto rendimiento, aprovechar el uso del proxy inverso y balanceador de carga de código abierto, y como intermediario seguro (proxy) para redirigir peticiones a un servidor backend y orquestado con compose con un build tool como vite, react y typescript. Para tener control total de la ui/ux uso de scss, para aprovechar nginx que es reconocido por su bajo consumo de recursos y gran capacidad para gestionar múltiples conexiones simultáneas. Una creación de tokens.scss a gustos personales o del cliente, para mis gustos personales prefiero estilos minimalistas que respeten las leyes ui/ux
-Es mejor Streamlit de lo que yo propongo? Por qué?
+   Tengo que diagramar el frontend para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de React o Streamlit. Propongo un entorno contenerizado multi-stage con docker y uso de nginx para tener un servidor de alto rendimiento, aprovechar el uso del proxy inverso y balanceador de carga de código abierto, y como intermediario seguro (proxy) para redirigir peticiones a un servidor backend y orquestado con compose con un build tool como vite, react y typescript. Para tener control total de la ui/ux uso de scss, para aprovechar nginx que es reconocido por su bajo consumo de recursos y gran capacidad para gestionar múltiples conexiones simultáneas. Una creación de tokens.scss a gustos personales o del cliente, para mis gustos personales prefiero estilos minimalistas que respeten las leyes ui/ux
+   Es mejor Streamlit de lo que yo propongo? Por qué?
 
 5. UI/UX:
 
-Tengo que diagramar la UI/UX para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de .scss. Propongo un estilo minimalista, que siga un pulido quirurgico, estructura para distintas resoluciones desde dispositivos moviles, tablets y monitores y una estructura de tokens.scss como variables principales que los demás componentes scss tomarán como base para su creación. Los mismos deberan seguir las leyes principales ui/ux, como colores de los semaforos para alertar, llamar la atención o mostras que está todo bien.
+   Tengo que diagramar la UI/UX para un sistema de gestión de stock (productos-categorias-movimientos-historial ) con el uso de .scss. Propongo un estilo minimalista, que siga un pulido quirurgico, estructura para distintas resoluciones desde dispositivos moviles, tablets y monitores y una estructura de tokens.scss como variables principales que los demás componentes scss tomarán como base para su creación. Los mismos deberan seguir las leyes principales ui/ux, como colores de los semaforos para alertar, llamar la atención o mostras que está todo bien.
 
 ### Hoja de Ruta de Implementación
 
