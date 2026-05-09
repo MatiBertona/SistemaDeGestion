@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import type { Product } from '../../types/inventory';
+import type { Product } from '../../types/stock.types';
 import styles from './ProductTable.module.scss';
 
 interface Props {

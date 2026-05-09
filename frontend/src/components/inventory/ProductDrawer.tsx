@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import type { Product } from '../../types/inventory';
+import type { Product } from '../../types/stock.types';
 import { StockChart } from './StockChart';
 import styles from './ProductDrawer.module.scss';
 

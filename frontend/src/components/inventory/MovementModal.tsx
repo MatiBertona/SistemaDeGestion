@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 import { useState, useMemo } from 'react';
-import type { Product, StockMovement } from '../../types/inventory';
+import type { Product, CreateMovementDTO } from '../../types/stock.types';
 import styles from './MovementModal.module.scss';
 
 interface Props {
   product: Product;
   onClose: () => void;
-  onSubmit: (movement: Omit<StockMovement, 'id' | 'date'>) => void;
+  onSubmit: (movement: CreateMovementDTO) => void;
 }
 
 export const MovementModal: FC<Props> = ({ product, onClose, onSubmit }) => {
