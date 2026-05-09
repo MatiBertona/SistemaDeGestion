@@ -29,7 +29,7 @@ class SQLAlchemyProductoRepository(ProductoRepository):
             query = query.join(ProductoModel.categoria).filter(CategoriaModel.nombre.ilike(f"%{categoria_nombre}%"))
         
         result = await self.session.execute(query)
-        models = result.scalars().all()
+        models = result.unique().scalars().all()
         return [self._to_entity(m) for m in models]
 
     async def get_by_id(self, id: int) -> Optional[ProductoEntity]:
@@ -55,9 +55,15 @@ class SQLAlchemyProductoRepository(ProductoRepository):
             model.nombre = entity.nombre
             model.precio_unitario = entity.precio_unitario
             model.stock_actual = entity.stock_actual
-            # ... otros campos
+            model.min_stock = entity.min_stock
+            model.max_stock = entity.max_stock
+            model.categoria_id = entity.categoria.id if entity.categoria else None
         
         await self.session.flush()
+        # Cargar la relación categoría para el mapeo a entidad
+        query = select(ProductoModel).options(joinedload(ProductoModel.categoria)).where(ProductoModel.id == model.id)
+        result = await self.session.execute(query)
+        model = result.scalar_one()
         return self._to_entity(model)
 
     async def add_movement(self, movimiento: MovimientoEntity) -> MovimientoEntity:

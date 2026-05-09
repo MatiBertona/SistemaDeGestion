@@ -39,7 +39,7 @@ class MovimientoModel(Base):
     __table_args__ = {"schema": "inventario"}
     id = Column(Integer, primary_key=True)
     producto_id = Column(Integer, ForeignKey("inventario.producto.id"), nullable=False)
-    tipo = Column(Enum(MovementType), nullable=False)
+    tipo = Column(Enum(MovementType, native_enum=False), nullable=False)
     cantidad = Column(Integer, nullable=False)
     fecha = Column(DateTime, default=datetime.utcnow)
     motivo = Column(String(255))

@@ -5,6 +5,8 @@ services:
     restart: always
 
   backend:
+    build:
+      context: ./backend
     restart: always
     # Sin volúmenes montados (código inmutable dentro de la imagen)
     environment:

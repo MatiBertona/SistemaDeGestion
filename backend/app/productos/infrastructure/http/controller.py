@@ -26,14 +26,20 @@ async def crear_producto(
 ):
     repository = SQLAlchemyProductoRepository(db)
     service = CrearProductoService(repository)
-    return await service.execute(
-        nombre=producto.nombre,
-        sku=producto.sku,
-        precio_unitario=producto.precio_unitario,
-        min_stock=producto.min_stock,
-        max_stock=producto.max_stock,
-        categoria_id=producto.categoria_id
-    )
+    try:
+        result = await service.execute(
+            nombre=producto.nombre,
+            sku=producto.sku,
+            precio_unitario=producto.precio_unitario,
+            min_stock=producto.min_stock,
+            max_stock=producto.max_stock,
+            categoria_id=producto.categoria_id
+        )
+        await db.commit()
+        return result
+    except Exception as e:
+        await db.rollback()
+        raise e
 
 @router.post("/movimientos", response_model=MovimientoResource)
 async def registrar_movimiento(
@@ -43,14 +49,20 @@ async def registrar_movimiento(
     repository = SQLAlchemyProductoRepository(db)
     service = RegistrarMovimientoService(repository)
     try:
-        return await service.execute(
+        result = await service.execute(
             producto_id=movimiento.producto_id,
             tipo=movimiento.tipo.value,
             cantidad=movimiento.cantidad,
             motivo=movimiento.motivo
         )
+        await db.commit()
+        return result
     except ValueError as e:
+        await db.rollback()
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        await db.rollback()
+        raise e
 
 @router.get("/{producto_id}/movimientos", response_model=List[MovimientoResource])
 async def listar_movimientos_producto(
