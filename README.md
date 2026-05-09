@@ -192,40 +192,33 @@ https://lawsofux-com.translate.goog/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_p
 
 ## 6. Respuestas a Preguntas Conceptuales (Evaluación)
 
-A continuación se responden las preguntas teóricas planteadas en la consigna de evaluación:
+A continuación se detallan las decisiones arquitectónicas y técnicas tomadas durante el desarrollo, respondiendo a los puntos de la evaluación:
 
 ### 1. Base de Datos
-*   **¿Por qué elegir PostgreSQL?** Se eligió por ser un motor relacional robusto, de código abierto, con excelente cumplimiento ACID y capacidades avanzadas (como soporte nativo para JSON, crucial si los requerimientos de productos se vuelven dinámicos). Es el estándar de facto para sistemas transaccionales serios.
-*   **Uso de ORM (Ventajas/Desventajas):** Sí, se utiliza SQLAlchemy.
-    *   *Ventajas:* Acelera el desarrollo, abstrae las consultas SQL evitando inyecciones (SQL Injection), y facilita el mapeo directo a objetos de dominio (Entities) mediante Arquitectura Hexagonal.
-    *   *Desventajas:* Curva de aprendizaje inicial, y en consultas *muy* masivas o reportes complejos, el ORM puede generar SQL menos eficiente que un query crudo optimizado (aunque SQLAlchemy permite bajar a SQL crudo si es necesario).
-*   **Evitar Stock Negativo:** La primera capa de defensa es la lógica de negocio en el Backend, pero la garantía real (la "última frontera") se define en la base de datos mediante un constraint explícito: `CONSTRAINT chk_stock_positivo CHECK (stock_actual >= 0)`.
-*   **Convivencia del Stack:** El ORM convive con el código de aplicación (FastAPI). Para el versionado de la estructura de la base de datos se utilizaría una herramienta de migraciones (como **Alembic**, que es parte del ecosistema de SQLAlchemy), garantizando que los cambios de esquema se apliquen de forma controlada en los distintos entornos. En este MVP inicial, la estructura base se carga mediante un script `init.sql` montado en el contenedor.
+*   **Elección de DB:** Se seleccionó **PostgreSQL**. Es la opción estándar de la industria por su robustez, soporte de integridad referencial y rendimiento asíncrono.
+*   **Uso de ORM:** Se utilizó **SQLAlchemy 2.0 (Async)**.
+    *   *Ventajas:* Prevención de SQL Injection, facilidad de migraciones, tipado fuerte y desacoplamiento mediante el patrón Repository.
+    *   *Desventajas:* Sobrecarga en queries extremadamente complejas (mitigado permitiendo SQL crudo si es necesario).
+*   **Garantía de Stock No Negativo:** Implementada mediante una doble validación:
+    1.  **Nivel DB:** `CheckConstraint` en la tabla `producto` (`stock_actual >= 0`).
+    2.  **Nivel Aplicación:** Validación en `RegistrarMovimientoService` antes de persistir la transacción.
+*   **Convivencia del Stack:** El ORM mapea modelos a entidades de dominio. Se recomienda el uso de **Alembic** para el versionado del esquema en entornos reales.
 
-### 2. Historial de Cambios y Escalabilidad
-*   **Auditoría de cambios (Nombre/Precio):** No guardaría la auditoría en la misma tabla del producto. Utilizaría una tabla dedicada (ej. `producto_auditoria`) o implementaría un enfoque de *Event Sourcing*, donde cada evento ("PrecioCambiado", "NombreModificado") se inserta en un log inmutable de base de datos.
-*   **Escalar a 500,000 productos y miles de movimientos:**
-    *   *Base de datos:* Implementaría **particionamiento de tablas** para `movimientos` (ej. particiones mensuales) para evitar que la tabla crezca infinitamente afectando el rendimiento de inserción.
-    *   *Caché:* Integraría **Redis** delante de la base de datos para almacenar temporalmente el listado de productos y su stock actual, ya que las lecturas serán mucho más frecuentes que las escrituras.
-    *   *Stock Histórico:* Para consultar el stock en una fecha pasada de forma eficiente, crearía un sistema de *Snapshots* (ej. guardar una foto del stock de cada producto al cierre de cada mes) y para consultar una fecha específica, tomaría el snapshot más cercano y le sumaría/restaría solo los movimientos de esos días de diferencia.
+### 2. Backend (Arquitectura y Seguridad)
+*   **Patrón:** **Arquitectura Hexagonal**. Desacopla la lógica de negocio (Dominio) de la infraestructura (FastAPI/SQLAlchemy), facilitando el mantenimiento y testing.
+*   **Deploy:** Sistema completamente **Dockerizado**. Paridad entre entornos mediante `compose.dev.yaml` y `compose.prod.yaml`.
+*   **Seguridad:**
+    *   **CORS:** Configurado quirúrgicamente en `main.py` para permitir solo el origen del frontend.
+    *   **Contraseñas:** (Propuesta) Hashing con **Bcrypt/Argon2** y autenticación vía **JWT**.
+    *   **Roles:** Protección de endpoints mediante dependencias de FastAPI inyectando permisos según el rol del usuario.
 
-### 3. Backend (Decisiones y Seguridad)
-*   **Deploy:** Dockerizado. Empaquetar la aplicación y sus dependencias (Vite/Nginx para front, FastAPI para back, Postgres para DB) en contenedores garantiza que funcione igual en local y en la nube (AWS/GCP).
-*   **Seguridad y Roles:** Implementaría autenticación basada en **JWT (JSON Web Tokens)**. Los roles (Admin, Operador) se guardan en la base de datos y se adjuntan como *claims* dentro del payload del token.
-*   **Protección de Endpoints:** Mediante dependencias de FastAPI (Decoradores de autorización), interceptando la petición, validando la firma del JWT y comprobando si el rol del usuario tiene el permiso necesario antes de ejecutar el controlador.
-*   **Contraseñas:** **Nunca** se guardan en texto plano. Se utilizaría un algoritmo de hashing fuerte con salt, como **Bcrypt** o **Argon2** (vía la librería `passlib` en Python).
-*   **Logs vs Auditoría:** Los logs de aplicación (errores técnicos, tiempos de respuesta, HTTP 500) irían a la salida estándar del contenedor (stdout) y serían recolectados por un sistema como Datadog o ELK, utilizando **Grafana** para la visualización y alertas de métricas críticas. Esto es diferente a la auditoría de negocio (quién movió stock), que vive estructurada en tablas relacionales para ser consultada por los usuarios desde la interfaz.
+### 3. Frontend (Tecnología y UX)
+*   **¿Por qué React?** Ofrece control total sobre el ciclo de vida, rendimiento optimizado y permite un sistema de diseño a medida con **TanStack Query** para la gestión de estado de servidor.
+*   **Arquitectura de Estilos:** Sistema de **Tokens Neutros** y SCSS Modular. Organización quirúrgica de archivos para escalabilidad y soporte nativo de **Modo Oscuro**.
+*   **UX Operativa:** Implementación de **Acciones Rápidas (Dropdowns)**, **Drawer Lateral** para análisis profundo y **Validaciones en tiempo real** para una experiencia fluida y profesional.
 
-### 4. Frontend (Elección de Tecnología)
-*   **¿React o Streamlit?** Elegí **React**.
-*   **Contexto de uso:** Streamlit es excelente para prototipos rápidos de Data Science, paneles internos simples o cuando el equipo solo domina Python. Sin embargo, para un sistema transaccional robusto, React permite crear una **Single Page Application (SPA)** escalable, con control absoluto del ciclo de vida de los componentes, la gestión del estado global y el rendimiento (la carga gráfica recae en el cliente y no en el servidor).
-*   **Sacrificios:** Al elegir React, sacrifiqué la "velocidad de construcción inicial" y la simplicidad de tener todo en un solo lenguaje (Python), asumiendo el costo de mantener un repositorio separado, configurar Node/Vite y manejar llamadas asíncronas HTTP hacia la API.
+### 4. Uso de Inteligencia Artificial (Gemini CLI)
+*   **Potenciación:** La IA actuó como un copiloto de ingeniería, acelerando la curva de aprendizaje en FastAPI y SQLAlchemy.
+*   **Refactorización:** Permitió ejecutar refactors quirúrgicos (modularización de componentes, mapeo de servicios) garantizando el cumplimiento de principios SOLID y Clean Code.
+*   **Decisión Estratégica:** Facilitó la transición de una mentalidad monolítica a una arquitectura por capas limpia y desacoplada.
 
-### 5. Uso de Inteligencia Artificial
-*   **Herramienta usada:** Se utilizó **Gemini CLI**, una herramienta de inteligencia artificial integrada en la terminal.
-*   **Propósito puntual:**
-    *   **Adaptación Técnica:** El **CLI de Gemini** fue fundamental para facilitar la transición y adaptación a **FastAPI**. Viniendo de un entorno más familiarizado con **Laravel** y su sintaxis de Eloquent (ej. `with()->where()->`), la IA actuó como un guía experto para traducir esos conceptos a **SQLAlchemy** y los patrones asíncronos de Python.
-    *   **Orquestación de Tareas:** Se utilizó para la gestión de la estructura de archivos, generación de *boilerplates* de Docker (Dockerfile multi-stage, docker-compose) y refactorización de código en tiempo real.
-    *   **Documentación Técnica:** Generación y refinamiento de documentos Markdown asegurando coherencia técnica y profesionalismo.
-*   **Experiencia del Desarrollador:** La organización de carpetas y la orquestación con Docker resultaron ser conceptos familiares y accesibles, lo que permitió que la transición a Python fuera fluida. En todo momento, el CLI sirvió como un copiloto que orientó y guio el proyecto hacia la dirección deseada, permitiendo mantener el control creativo y arquitectónico mientras se aceleraba la curva de aprendizaje.
-*   **Cambio de decisión:** Inicialmente, el chat sugería usar scripts locales `.ini` para inicializar la base de datos. Sin embargo, a través del **CLI de Gemini**, decidimos cambiar el rumbo y aprovechar las capacidades nativas de PostgreSQL en Docker (montando el `init.sql` directamente en el contenedor), eliminando así la necesidad de ejecutar comandos manuales en el entorno local del desarrollador.
