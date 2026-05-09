@@ -231,3 +231,25 @@ A continuación se detallan las decisiones arquitectónicas y técnicas tomadas 
 *   **Refactorización:** Permitió ejecutar refactors quirúrgicos (modularización de componentes, mapeo de servicios) garantizando el cumplimiento de principios SOLID y Clean Code.
 *   **Decisión Estratégica:** Facilitó la transición de una mentalidad monolítica a una arquitectura por capas limpia y desacoplada.
 
+### 5. Historial de Cambios (Auditoría)
+*   **Estrategia:** Para cambios en campos críticos (como precio o nombre), utilizaría una tabla separada de auditoría (ej. `producto_auditoria`). Guardar estos cambios en la misma tabla ensucia el modelo, y en sistemas externos de logeo se pierde la integridad referencial y la capacidad de realizar consultas relacionales fácilmente.
+*   **Estructura:** La tabla guardaría `producto_id`, `campo_modificado`, `valor_anterior`, `valor_nuevo`, `usuario_id` y `fecha`. Se alimentaría mediante *Triggers* en la base de datos para asegurar consistencia, o en la capa de aplicación (Servicios) si se requiere enriquecer con contexto de negocio adicional.
+
+### 6. Escalabilidad (500.000 productos y miles de movimientos)
+*   **Rendimiento de Búsqueda:** Implementaría particionamiento (Table Partitioning) de la tabla de movimientos por rango de fechas (ej. mensual o trimestral) para evitar que la tabla principal crezca indefinidamente en lecturas pesadas.
+*   **Stock Histórico:** En lugar de recalcular los movimientos desde el día cero (lo cual sería insostenible), implementaría **Snapshots de Stock** (cierres de inventario mensuales/diarios) en una tabla auxiliar. Para saber el stock de una fecha pasada, se tomaría el último snapshot anterior a la fecha objetivo y se le aplicarían/sumarían solo los movimientos intermedios.
+*   **Caché:** Uso de bases de datos en memoria (ej. Redis) para lecturas rápidas del catálogo de productos activos y su stock actual.
+
+### 7. Logs del Sistema
+*   **Eventos a registrar:** Errores no controlados (500), latencia de endpoints, fallos de autenticación, y excepciones de negocio puras (ej. "intento de movimiento con stock negativo o no autorizado").
+*   **Almacenamiento:** Archivos de texto estructurado (JSON logs) recolectados por agentes (ej. Filebeat, Promtail) y enviados a un sistema centralizado de observabilidad (ELK Stack, Datadog, Grafana Loki).
+*   **Diferenciación:** La auditoría de stock (los movimientos y cambios de producto) pertenece al modelo de negocio y se guarda en la base relacional transaccional. Los logs de aplicación son de naturaleza inmutable, masivos y técnicos, su ciclo de vida es diferente (rotación y expiración corta), por lo que van a sistemas especializados y no a la base de datos principal.
+
+### 8. Alerta de Stock Bajo (Umbrales y UX)
+*   **Definición de Umbral:** Debe ser configurable a nivel de producto (`min_stock`), con un valor *fallback* o por defecto en la categoría. 
+*   **Cambios en el Modelo de Datos:** Ya contamos con `min_stock` a nivel producto. Se podría añadir `min_stock_default` en la tabla `categoria` para soportar la herencia de configuración si el producto no define uno.
+*   **Consideraciones de UX (Para evitar fatiga de alertas):**
+    *   No utilizar modales o pop-ups intrusivos (ej. `alert()` nativo del navegador) que interrumpan el flujo de trabajo del usuario.
+    *   Agrupar notificaciones en un centro de alertas o badge en el panel de navegación (ej. "N productos críticos").
+    *   Añadir un estado lógico de "En Reposición / Compra en Proceso" para permitirle al usuario silenciar o "marcar como atendidas" las alertas de productos que ya están siendo gestionados por el área de compras, reduciendo el ruido visual.
+

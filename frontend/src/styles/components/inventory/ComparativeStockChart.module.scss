@@ -1,0 +1,68 @@
+@import "../../config/tokens.scss";
+
+.chartContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  padding: $space-md;
+  background: var(--sys-surface);
+  border-radius: var(--rad-lg);
+  border: 1px solid var(--sep-standard);
+  height: 100%;
+}
+
+.title {
+  font-size: $f-size-md;
+  font-weight: $f-weight-bold;
+  color: var(--txt-primary);
+}
+
+.barsWrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: $space-sm;
+  height: 200px;
+  padding-bottom: $space-xl;
+  position: relative;
+}
+
+.barGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-xxs;
+  height: 100%;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.maxBar {
+  width: 100%;
+  background: var(--sep-standard);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+.actualBar {
+  width: 100%;
+  background: var(--brand-primary);
+  border-radius: 4px 4px 0 0;
+  transition: var(--mot-standard);
+}
+
+.label {
+  position: absolute;
+  bottom: -35px;
+  font-size: 9px;
+  font-weight: $f-weight-semibold;
+  color: var(--txt-muted);
+  text-transform: uppercase;
+  transform: rotate(-45deg);
+  white-space: nowrap;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
