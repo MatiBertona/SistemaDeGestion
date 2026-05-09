@@ -1,4 +1,4 @@
-@import '../../config/tokens';
+@import "../../config/tokens.scss";
 
 .modalOverlay {
   position: fixed;
@@ -100,12 +100,12 @@
     opacity: 0.7;
     cursor: not-allowed;
   }
-  
+
   &.error {
     border-color: var(--stat-danger);
     background: var(--stat-danger-bg);
     color: var(--stat-danger);
-    
+
     &:focus {
       box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.2);
     }
@@ -124,7 +124,7 @@ textarea.inputField {
   padding: 2px;
   border-radius: 9px;
   position: relative;
-  
+
   button {
     flex: 1;
     padding: 6px 0;
@@ -141,7 +141,9 @@ textarea.inputField {
     &.active {
       color: var(--txt-primary);
       background: var(--sys-surface);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 3px 1px rgba(0, 0, 0, 0.04);
+      box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.12),
+        0 3px 1px rgba(0, 0, 0, 0.04);
     }
   }
 }
@@ -151,12 +153,12 @@ textarea.inputField {
   color: var(--txt-muted);
   display: flex;
   justify-content: space-between;
-  
+
   .errorText {
     color: var(--stat-danger);
     font-weight: $f-weight-medium;
   }
-  
+
   .resultText {
     font-weight: $f-weight-semibold;
     font-variant-numeric: tabular-nums;
@@ -205,18 +207,28 @@ textarea.inputField {
   @extend .btn;
   background: transparent;
   color: var(--brand-primary);
-  
+
   &:hover {
     background: var(--brand-primary-alpha);
   }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes scaleIn {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

@@ -1,4 +1,4 @@
-@import "config/tokens";
+@import "config/tokens.scss";
 
 // Estilos globales de la aplicación
 body {
@@ -6,13 +6,17 @@ body {
   padding: 0;
   background-color: $color-bg;
   color: $color-text-primary;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    system-ui, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
   // Transición suave al cambiar de tema
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 // Scrollbar 100% Tokenizado
@@ -28,19 +32,31 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--sb-thumb);
   border-radius: var(--rad-pill);
-  
+
   &:hover {
     background: var(--sb-thumb-hover);
   }
 }
 
 // Utilidades semánticas
-.text-primary { color: $color-text-primary; }
-.text-secondary { color: $color-text-secondary; }
-.text-muted { color: $color-text-muted; }
-.text-danger { color: $color-danger; }
-.text-success { color: $color-success; }
-.text-warning { color: $color-warning; }
+.text-primary {
+  color: $color-text-primary;
+}
+.text-secondary {
+  color: $color-text-secondary;
+}
+.text-muted {
+  color: $color-text-muted;
+}
+.text-danger {
+  color: $color-danger;
+}
+.text-success {
+  color: $color-success;
+}
+.text-warning {
+  color: $color-warning;
+}
 
 // Foco global quirúrgico
 *:focus-visible {

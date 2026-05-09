@@ -1,4 +1,4 @@
-@import './config/tokens';
+@import "./config/tokens.scss";
 
 .appWrapper {
   min-height: 100vh;
@@ -65,7 +65,9 @@
     justify-content: center;
     transition: var(--mot-quick);
 
-    &:active { transform: scale(0.9); }
+    &:active {
+      transform: scale(0.9);
+    }
 
     .badge {
       position: absolute;
@@ -121,7 +123,9 @@
       padding: $space-xxs;
       transition: color var(--mot-quick);
 
-      &:hover { color: var(--txt-primary); }
+      &:hover {
+        color: var(--txt-primary);
+      }
     }
   }
 }
@@ -277,7 +281,7 @@
   align-items: center;
   justify-content: center;
   gap: $space-sm;
-  
+
   &:active {
     transform: scale(0.97);
   }
@@ -334,14 +338,14 @@
   padding: 60px var(--rad-xl);
   text-align: center;
 
-  .emptyIcon { 
+  .emptyIcon {
     color: var(--txt-muted);
     margin-bottom: var(--rad-md);
   }
-  p { 
-    font-size: 16px; 
-    font-weight: $f-weight-medium; 
-    color: var(--txt-secondary); 
-    margin-bottom: var(--rad-lg); 
+  p {
+    font-size: 16px;
+    font-weight: $f-weight-medium;
+    color: var(--txt-secondary);
+    margin-bottom: var(--rad-lg);
   }
 }
