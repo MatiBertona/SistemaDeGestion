@@ -1,31 +1,23 @@
-# Etapa 1: Construcción (Build)
-FROM node:20-slim AS build
-
+# Etapa 1: Base de dependencias
+FROM node:20-slim AS base
 WORKDIR /app
-
-# Argumentos de construcción
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
-
-# Copiar archivos de dependencias
 COPY package*.json ./
-
-# Instalar dependencias
 RUN npm install
 
-# Copiar el resto del código fuente
+# Etapa 2: Desarrollo (Para usar con volúmenes y hot-reload)
+FROM base AS dev
 COPY . .
+CMD ["npm", "run", "dev", "--", "--host"]
 
-# Compilar la aplicación
+# Etapa 3: Construcción (Build para producción)
+FROM base AS build
+COPY . .
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
-# Etapa 2: Producción (Servidor Estático)
-FROM nginx:alpine
-
-# Copiar los archivos compilados desde la etapa anterior al directorio de Nginx
+# Etapa 4: Producción (Servidor Estático Nginx)
+FROM nginx:alpine AS prod
 COPY --from=build /app/dist /usr/share/nginx/html
-
-# Exponer el puerto 80
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]

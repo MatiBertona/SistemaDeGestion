@@ -1,23 +1,46 @@
-# Entorno de Producción
 services:
   db:
-    # Sin puertos expuestos al host por seguridad
+    image: postgres:15-alpine
+    container_name: inventario_db_prod
     restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - inventario_pg_data_prod:/var/lib/postgresql/data
+      - ./basededatos/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - inventory_network_prod
 
   backend:
     build:
       context: ./backend
+    container_name: inventario_backend_prod
     restart: always
-    # Sin volúmenes montados (código inmutable dentro de la imagen)
     environment:
-      - SQLALCHEMY_ECHO=False
-    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    depends_on:
+      - db
+    networks:
+      - inventory_network_prod
 
   frontend:
     build:
       context: ./frontend
+      target: prod
       args:
         - VITE_API_URL=${VITE_API_URL}
+    container_name: inventario_frontend_prod
     ports:
       - "80:80"
     restart: always
+    networks:
+      - inventory_network_prod
+
+volumes:
+  inventario_pg_data_prod:
+
+networks:
+  inventory_network_prod:
+    driver: bridge
