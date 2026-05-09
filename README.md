@@ -99,25 +99,21 @@ Genera el código para la siguiente estructura vertical, asegurando un tipado es
 A continuación, detallo el procedimiento técnico seguido para la construcción del sistema, destacando el rol fundamental de Gemini CLI y sus Specialized Skills en la toma de decisiones y ejecución.
 Con el repositorio base ya inicializado, el proceso se estructuró en fases incrementales de diseño y ejecución, utilizando la potencia de la CLI para automatizar tareas complejas y garantizar la calidad arquitectónica.
 
-  1. Infraestructura y Orquestación Inicial
-  Una vez implementado el repositorio, procedí a la creación de la base de datos y la configuración del entorno de contenedores:
+1. Infraestructura y Orquestación Inicial: Una vez implementado el repositorio, procedí a la creación de la base de datos y la configuración del entorno de contenedores:
    - Configuración de Base de Datos: Se definió el esquema inicial en init.sql.
    - Docker Compose: Configuré el archivo compose.yaml integrando PostgreSQL con healthchecks para asegurar que los servicios dependientes solo iniciaran cuando la base de datos estuviera lista.
    - Verificación: Utilicé comandos de la CLI para validar la conectividad y persistencia de los volúmenes de datos.
 
-  2. Containerización y Backend Progresivo
-  Con la infraestructura base operativa, utilicé Gemini CLI para la creación del Dockerfile del backend:
+2. Containerización y Backend Progresivo: Con la infraestructura base operativa, utilicé Gemini CLI para la creación del Dockerfile del backend:
    - Optimización: La CLI generó un Dockerfile multi-stage (builder y runtime) basado en Python 3.11-slim, priorizando la seguridad (usuario no privilegiado) y la eficiencia del tamaño de imagen.
    - Integración: Instancié el backend en el compose.yaml vinculándolo a la red interna y configurando las variables de entorno necesarias para la conexión asíncrona.
 
-  3. Arquitectura DDD y Selección de Tecnologías
-  Una vez que el contenedor del backend estuvo en ejecución, procedí con la implementación de las capas de software:
+3. Arquitectura DDD y Selección de Tecnologías: Una vez que el contenedor del backend estuvo en ejecución, procedí con la implementación de las capas de software:
    - Estructura Hexagonal / DDD: Siguiendo algunas recomendaciones de la CLI en como podia implementar esto en un lenguaje no familiarizado, organicé el código en capas de Domain, Application e Infrastructure etc.
    - Selección de ORM (SQLAlchemy vs. Alternativas): Al venir de un entorno de PHP/Laravel, utilicé la capacidad de investigación de la CLI para comparar SQLAlchemy (con SQLModel) frente a otras alternativas en Python. La conclusión fue
      optar por SQLAlchemy con asyncpg para aprovechar al máximo la programación asíncrona de FastAPI, manteniendo un patrón de repositorio sólido.
 
-  4. Frontend y Cierre de Ciclo
-  Finalmente, repliqué el proceso riguroso para el frontend:
+4. Frontend y Cierre de Ciclo: Finalmente, repliqué el proceso riguroso para el frontend:
    - Desarrollo: Implementé una Single Page Application (SPA) con React y TypeScript, utilizando SCSS para el diseño visual, tal como se definió en la fase de diseño.
    - Despliegue: Integré el contenedor del frontend en la orquestación global, asegurando la comunicación fluida con la API del backend.
    - Integración: plantie el diseño Services -> Custom Hooks -> Componentes y posteriomente, integré la api al axios, corregi el .env para las urls y corroboré que todo anduviera.
