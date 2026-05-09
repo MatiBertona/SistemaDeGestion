@@ -1,5 +1,13 @@
 @import "primitives";
 
+$status-critical: #ef4444;
+$status-low: #f59e0b;
+$status-healthy: #22c55e;
+$bg-critical: rgba(239, 68, 68, 0.05);
+$bg-low: rgba(245, 158, 11, 0.05);
+$border-soft: #e2e8f0;
+$text-soft: #64748b;
+
 :root {
   // Colores Semánticos
   --stock-ok: #{$green-glow};
