@@ -80,12 +80,7 @@ function App() {
           onExport={() => alert('Próximamente: Exportar Datos')}
         />
 
-        <div className="dashboardGrid" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-          gap: '1.5rem',
-          marginBottom: '2rem'
-        }}>
+        <div className="dashboardGrid">
           <AlertPanel products={products} />
           <ComparativeStockChart products={products} />
         </div>
