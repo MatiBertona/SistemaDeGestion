@@ -1,0 +1,25 @@
+.chartContainer {
+  height: 150px;
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.barGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.barActual { width: 100%; background: #3b82f6; border-radius: 4px; transition: height 0.3s ease; }
+.barMin { width: 100%; background: #f59e0b; border-radius: 4px; opacity: 0.8; }
+.barMax { width: 100%; background: #94a3b8; border-radius: 4px; opacity: 0.5; }
+
+.label { font-size: 10px; font-weight: 700; color: #1e293b; }
