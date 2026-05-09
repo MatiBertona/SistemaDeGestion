@@ -20,42 +20,55 @@ export const ProductTable: React.FC<Props> = ({ products, onSelect }) => {
   }, [products]);
 
   return (
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th>Producto / SKU</th>
-          <th>Categoría</th>
-          <th>Stock</th>
-          <th>Estado</th>
-          <th>Precio</th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedProducts.map(p => (
-          <tr 
-            key={p.id} 
-            onClick={() => onSelect(p)}
-            className={p.stock_actual === 0 ? styles.critical : p.stock_actual <= p.min_stock ? styles.low : ''}
-          >
-            <td>
-              <div className={styles.name}>{p.name}</div>
-              <div className={styles.sku}>{p.sku}</div>
-            </td>
-            <td><span className={styles.categoryBadge}>{p.category_name}</span></td>
-            <td><strong>{p.stock_actual}</strong></td>
-            <td>
-              {p.stock_actual === 0 ? (
-                <span className={styles.statusBadgeCritical}>SIN STOCK</span>
-              ) : p.stock_actual <= p.min_stock ? (
-                <span className={styles.statusBadgeLow}>STOCK BAJO</span>
-              ) : (
-                <span className={styles.statusHealthy}>● Saludable</span>
-              )}
-            </td>
-            <td>${p.price.toFixed(2)}</td>
+    <div className={styles.tableContainer}>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th>Precio</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {sortedProducts.map(p => {
+            const isCritical = p.stock_actual === 0;
+            const isLow = !isCritical && p.stock_actual <= p.min_stock;
+            
+            return (
+              <tr 
+                key={p.id} 
+                onClick={() => onSelect(p)}
+                className={isCritical ? styles.critical : isLow ? styles.low : ''}
+              >
+                <td>
+                  <div className={styles.productInfo}>
+                    <span className={styles.name}>{p.name}</span>
+                    <span className={styles.sku}>{p.sku}</span>
+                  </div>
+                </td>
+                <td>
+                  <span className={styles.categoryBadge}>{p.category_name}</span>
+                </td>
+                <td className={styles.stock}>
+                  {p.stock_actual}
+                </td>
+                <td>
+                  {isCritical ? (
+                    <span className={styles.statusCritical}>Sin Stock</span>
+                  ) : isLow ? (
+                    <span className={styles.statusLow}>Stock Bajo</span>
+                  ) : (
+                    <span className={styles.statusHealthy}>Saludable</span>
+                  )}
+                </td>
+                <td className={styles.price}>${p.price.toLocaleString()}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };

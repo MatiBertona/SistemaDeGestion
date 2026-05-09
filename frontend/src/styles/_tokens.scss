@@ -1,29 +1,150 @@
-@import "primitives";
+// =========================================
+// 1. PRIMITIVAS (Base Palette)
+// =========================================
+$ref-blue: #007AFF;
+$ref-green: #34C759;
+$ref-orange: #FF9500;
+$ref-red: #FF3B30;
+$ref-white: #FFFFFF;
+$ref-black: #000000;
 
-$status-critical: #ef4444;
-$status-low: #f59e0b;
-$status-healthy: #22c55e;
-$bg-critical: rgba(239, 68, 68, 0.05);
-$bg-low: rgba(245, 158, 11, 0.05);
-$border-soft: #e2e8f0;
-$text-soft: #64748b;
+// Grises Neutros (System Gray Scale)
+$ref-gray-50: #F2F2F7;
+$ref-gray-100: #E5E5EA;
+$ref-gray-200: #D1D1D6;
+$ref-gray-300: #C7C7CC;
+$ref-gray-400: #AEAEB2;
+$ref-gray-500: #8E8E93;
+$ref-gray-600: #636366;
+$ref-gray-700: #48484A;
+$ref-gray-800: #3A3A3C;
+$ref-gray-900: #2C2C2E;
+$ref-gray-950: #1C1C1E;
 
+// =========================================
+// 2. SISTEMA DE VARIABLES CSS (SEMANTIC)
+// =========================================
 :root {
-  // Colores Semánticos
-  --stock-ok: #{$green-glow};
-  --stock-warning: #{$amber-glow};
-  --stock-danger: #{$red-glow};
-  
-  // Glass Tokens
-  --glass-bg: #{$glass-bg};
-  --glass-border: #{$glass-border};
-  --glass-blur: #{$glass-blur};
+    // Brand & Interaction
+    --brand-primary: #{$ref-blue};
+    --brand-accent: #{$ref-blue};
+    --brand-primary-alpha: #{rgba($ref-blue, 0.1)};
+    --brand-primary-alpha-bold: #{rgba($ref-blue, 0.15)};
 
-  // Text
-  --text-primary: #{$slate-50};
-  --text-secondary: rgba(255, 255, 255, 0.6);
-  
-  // Global Styles
-  --radius-default: #{$radius-md};
-  --bg-dark: #000000;
+    // Layout Backgrounds
+    --sys-bg: #{$ref-gray-50};
+    --sys-surface: #{$ref-white};
+    --sys-surface-elevated: #{$ref-white};
+    --sys-surface-variant: #{$ref-gray-100};
+    --sys-surface-alpha: #{rgba($ref-white, 0.8)};
+    --sys-surface-hover: #{rgba($ref-black, 0.03)};
+    --sys-surface-active: #{rgba($ref-black, 0.05)};
+
+    // Borders & Dividers
+    --sep-light: #{rgba($ref-black, 0.05)};
+    --sep-standard: #{rgba($ref-black, 0.1)};
+    --sep-strong: #{rgba($ref-black, 0.15)};
+    
+    // Typography
+    --txt-primary: #{$ref-black};
+    --txt-secondary: #{rgba(60, 60, 67, 0.85)}; 
+    --txt-muted: #{$ref-gray-500};
+    --txt-inverse: #{$ref-white};
+    --txt-on-brand: #{$ref-white};
+
+    // Semantic States
+    --stat-success: #{$ref-green};
+    --stat-warning: #{$ref-orange};
+    --stat-danger: #{$ref-red};
+    
+    --stat-success-bg: #{rgba($ref-green, 0.1)};
+    --stat-warning-bg: #{rgba($ref-orange, 0.1)};
+    --stat-danger-bg: #{rgba($ref-red, 0.1)};
+
+    // Elevation & Depth
+    --elev-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --elev-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --elev-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+    --elev-focus: 0 0 0 3px #{rgba($ref-blue, 0.1)};
+    
+    // Geometry
+    --rad-sm: 8px;
+    --rad-md: 12px;
+    --rad-lg: 20px;
+    --rad-xl: 24px;
+    --rad-pill: 999px;
+
+    // Motion
+    --mot-standard: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    --mot-quick: all 0.2s ease;
+    
+    // Z-Layers
+    --z-sticky: 1000;
+    --z-modal: 2000;
+    --z-tooltip: 3000;
+    
+    // Scrollbar
+    --sb-thumb: #{rgba($ref-black, 0.1)};
+    --sb-thumb-hover: #{rgba($ref-black, 0.2)};
 }
+
+[data-theme="dark"] {
+    --sys-bg: #{$ref-black};
+    --sys-surface: #{$ref-gray-950};
+    --sys-surface-elevated: #{$ref-gray-900};
+    --sys-surface-variant: #{$ref-gray-800};
+    --sys-surface-alpha: #{rgba($ref-gray-950, 0.8)};
+    --sys-surface-hover: #{rgba($ref-white, 0.05)};
+    --sys-surface-active: #{rgba($ref-white, 0.08)};
+
+    --sep-light: #{rgba($ref-white, 0.1)};
+    --sep-standard: #{rgba($ref-white, 0.15)};
+    
+    --txt-primary: #{$ref-white};
+    --txt-secondary: #{$ref-gray-200};
+    --txt-muted: #{$ref-gray-500};
+    
+    --sb-thumb: #{rgba($ref-white, 0.2)};
+    --sb-thumb-hover: #{rgba($ref-white, 0.3)};
+}
+
+// =========================================
+// 3. MAPEO SCSS (Functional Aliases)
+// =========================================
+$color-bg: var(--sys-bg);
+$color-surface: var(--sys-surface);
+$color-text-primary: var(--txt-primary);
+$color-text-secondary: var(--txt-secondary);
+$color-text-muted: var(--txt-muted);
+$color-brand: var(--brand-primary);
+$color-border: var(--sep-standard);
+$color-border-light: var(--sep-light);
+$color-success: var(--stat-success);
+$color-warning: var(--stat-warning);
+$color-danger: var(--stat-danger);
+
+$space-xl: 2.5rem;
+$space-lg: 1.5rem;
+$space-md: 1rem;
+$space-sm: 0.75rem;
+$space-xs: 0.5rem;
+$space-xxs: 0.25rem;
+
+$f-size-xl: 2.25rem;
+$f-size-lg: 1.5rem;
+$f-size-md: 1rem;
+$f-size-sm: 0.9375rem;
+$f-size-xs: 0.8125rem;
+$f-size-xxs: 0.6875rem;
+
+$f-weight-bold: 800;
+$f-weight-semibold: 600;
+$f-weight-medium: 500;
+$f-weight-regular: 400;
+
+$transition-main: var(--mot-standard);
+$transition-fast: var(--mot-quick);
+
+$z-sticky: var(--z-sticky);
+$z-modal: var(--z-modal);
+$z-tooltip: var(--z-tooltip);

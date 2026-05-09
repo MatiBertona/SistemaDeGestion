@@ -16,22 +16,25 @@ export const StockChart: React.FC<Props> = ({ actual, min, max }) => {
         <div 
           className={styles.barActual} 
           style={{ height: `${getPercent(actual)}%` }} 
+          title={`Actual: ${actual}`}
         />
-        <span className={styles.label}>ACTUAL ({actual})</span>
+        <span className={styles.label}>ACTUAL</span>
       </div>
       <div className={styles.barGroup}>
         <div 
           className={styles.barMin} 
           style={{ height: `${getPercent(min)}%` }} 
+          title={`Umbral: ${min}`}
         />
-        <span className={styles.label}>BAJO ({min})</span>
+        <span className={styles.label}>UMBRAL</span>
       </div>
       <div className={styles.barGroup}>
         <div 
           className={styles.barMax} 
           style={{ height: '100%' }} 
+          title={`Capacidad: ${max}`}
         />
-        <span className={styles.label}>MÁX ({max})</span>
+        <span className={styles.label}>CAPACIDAD</span>
       </div>
     </div>
   );
