@@ -1,0 +1,75 @@
+@import "../../config/tokens.scss";
+
+.panelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  padding: $space-md;
+  background: var(--sys-surface);
+  border-radius: var(--rad-lg);
+  border: 1px solid var(--sep-standard);
+  height: 100%;
+}
+
+.title {
+  font-size: $f-size-md;
+  font-weight: $f-weight-bold;
+  color: var(--txt-primary);
+  margin-bottom: $space-xs;
+}
+
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.alertCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-sm;
+  border-radius: var(--rad-md);
+  border-left: 4px solid transparent;
+  background: var(--sys-surface-hover);
+}
+
+.alertCardCritical {
+  border-left-color: var(--stat-danger);
+}
+
+.alertCardLow {
+  border-left-color: var(--stat-warning);
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.productName {
+  font-weight: $f-weight-semibold;
+  font-size: $f-size-sm;
+}
+
+.productSku {
+  font-size: $f-size-xxs;
+  color: var(--txt-muted);
+}
+
+.stockInfo {
+  text-align: right;
+}
+
+.stockValue {
+  font-weight: $f-weight-bold;
+  font-size: $f-size-sm;
+}
+
+.emptyMsg {
+  color: var(--txt-muted);
+  font-size: $f-size-sm;
+  font-style: italic;
+}

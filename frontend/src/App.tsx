@@ -9,6 +9,8 @@ import { ProductTable } from './components/inventory/ProductTable';
 import { ProductDrawer } from './components/inventory/ProductDrawer';
 import { MovementModal } from './components/inventory/MovementModal';
 import { InventoryControls } from './components/inventory/InventoryControls';
+import { AlertPanel } from './components/inventory/AlertPanel';
+import { ComparativeStockChart } from './components/inventory/ComparativeStockChart';
 
 // Capas de Servicio y Orquestación
 import { useProducts, useCategories, useStockMutations } from './hooks/useStock';
@@ -77,6 +79,16 @@ function App() {
           onCreateProduct={() => alert('Próximamente: Crear Producto')}
           onExport={() => alert('Próximamente: Exportar Datos')}
         />
+
+        <div className="dashboardGrid" style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+          gap: '1.5rem',
+          marginBottom: '2rem'
+        }}>
+          <AlertPanel products={products} />
+          <ComparativeStockChart products={products} />
+        </div>
 
         <section className="inventorySection">
           <InventoryControls 
