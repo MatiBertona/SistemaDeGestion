@@ -10,12 +10,16 @@
 
   th {
     padding: 12px var(--rad-xl);
-    text-align: left;
+    text-align: center;
     font-size: 13px;
     font-weight: $f-weight-semibold;
     color: var(--txt-secondary);
     border-bottom: 0.5px solid var(--sep-standard);
     background: var(--sys-surface-hover);
+
+    &:first-child {
+      text-align: left;
+    }
   }
 
   tr {
@@ -36,6 +40,11 @@
     padding: 16px var(--rad-xl);
     font-size: 15px;
     vertical-align: middle;
+    text-align: center;
+
+    &:first-child {
+      text-align: left;
+    }
   }
 }
 
