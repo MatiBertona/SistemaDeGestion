@@ -1,3 +1,18 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  margin-bottom: 2rem;
+  
+  h1 {
+    font-size: 2rem;
+    color: var(--text-h);
+  }
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
