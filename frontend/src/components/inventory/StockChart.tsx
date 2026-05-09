@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './StockChart.module.scss';
+import styles from '../../styles/components/inventory/StockChart.module.scss';
 
 interface Props {
   actual: number;

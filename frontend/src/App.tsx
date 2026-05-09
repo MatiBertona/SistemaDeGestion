@@ -4,7 +4,7 @@ import { ProductDrawer } from './components/inventory/ProductDrawer';
 import { MovementModal } from './components/inventory/MovementModal';
 import { useProducts, useCategories, useStockMutations } from './hooks/useStock';
 import type { Product, CreateMovementDTO } from './types/stock.types';
-import './App.scss';
+import './styles/App.scss';
 
 function App() {
   // Sincronización del tema con el DOM (Mantenemos la lógica de diseño)

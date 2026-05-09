@@ -6,5 +6,5 @@ class ListarProductosService:
     def __init__(self, repository: ProductoRepository):
         self.repository = repository
 
-    async def execute(self, categoria: Optional[str] = None) -> List[ProductoEntity]:
-        return await self.repository.get_all(categoria_nombre=categoria)
+    async def execute(self, categoria_nombre: Optional[str] = None) -> List[ProductoEntity]:
+        return await self.repository.get_all(categoria_nombre=categoria_nombre)

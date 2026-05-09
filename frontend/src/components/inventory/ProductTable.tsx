@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import type { Product } from '../../types/stock.types';
-import styles from './ProductTable.module.scss';
+import styles from '../../styles/components/inventory/ProductTable.module.scss';
 
 interface Props {
   products: Product[];

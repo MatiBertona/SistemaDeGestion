@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import type { Product } from '../../types/stock.types';
 import { StockChart } from './StockChart';
-import styles from './ProductDrawer.module.scss';
+import styles from '../../styles/components/inventory/ProductDrawer.module.scss';
 
 interface Props {
   product: Product | null;

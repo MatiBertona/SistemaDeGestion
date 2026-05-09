@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useState, useMemo } from 'react';
 import type { Product, CreateMovementDTO } from '../../types/stock.types';
-import styles from './MovementModal.module.scss';
+import styles from '../../styles/components/inventory/MovementModal.module.scss';
 
 interface Props {
   product: Product;
