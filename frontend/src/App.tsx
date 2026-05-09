@@ -80,12 +80,12 @@ function App() {
           onExport={() => alert('Próximamente: Exportar Datos')}
         />
 
-        <div className="dashboardGrid">
-          <AlertPanel products={products} />
-          <ComparativeStockChart products={products} />
-        </div>
-
         <section className="inventorySection">
+          <div className="dashboardGrid">
+            <AlertPanel products={products} />
+            <ComparativeStockChart products={products} />
+          </div>
+
           <InventoryControls 
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}

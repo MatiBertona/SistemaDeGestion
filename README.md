@@ -214,7 +214,10 @@ A continuación se detallan las decisiones arquitectónicas y técnicas tomadas 
 
 ### 3. Frontend (Tecnología y UX)
 *   **¿Por qué React?** Ofrece control total sobre el ciclo de vida, rendimiento optimizado y permite un sistema de diseño a medida con **TanStack Query** para la gestión de estado de servidor.
-*   **Arquitectura de Estilos:** Sistema de **Tokens Neutros** y SCSS Modular. Organización quirúrgica de archivos para escalabilidad y soporte nativo de **Modo Oscuro**.
+*   **Arquitectura de Estilos:** Sistema de **Tokens Premium** con jerarquía de elevación multi-capa y gradientes semánticos. Organización quirúrgica de archivos para escalabilidad y soporte nativo de **Modo Oscuro**.
+*   **Analítica de Datos:** El Dashboard no solo visualiza, sino que procesa información:
+    *   **Risk Index:** Algoritmo que calcula la criticidad de la operación en tiempo real.
+    *   **Operational Capacity:** Análisis porcentual de ocupación de almacén por SKU.
 *   **UX Operativa:** Implementación de **Acciones Rápidas (Dropdowns)**, **Drawer Lateral** para análisis profundo y **Validaciones en tiempo real** para una experiencia fluida y profesional.
 
 ### 4. Uso de Inteligencia Artificial (Gemini CLI)

@@ -3,66 +3,206 @@
 .chartContainer {
   display: flex;
   flex-direction: column;
-  gap: $space-md;
-  padding: $space-md;
   background: var(--sys-surface);
-  border-radius: var(--rad-lg);
-  border: 1px solid var(--sep-standard);
-  height: 100%;
+  border-radius: var(--rad-xl);
+  border: 1px solid var(--sep-light);
+  box-shadow: var(--elev-md);
+  padding: 24px;
+  height: 380px;
+  overflow: hidden;
+  transition: var(--mot-standard);
+
+  &:hover {
+    box-shadow: var(--elev-lg);
+    transform: translateY(-2px);
+  }
 }
 
-.title {
-  font-size: $f-size-md;
-  font-weight: $f-weight-bold;
-  color: var(--txt-primary);
-}
-
-.barsWrapper {
+.header {
   display: flex;
-  align-items: flex-end;
-  gap: $space-sm;
-  height: 200px;
-  padding-bottom: $space-xl;
-  position: relative;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-shrink: 0;
+
+  .titleGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    h3 {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--txt-primary);
+      margin: 0;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--txt-muted);
+      letter-spacing: 0.02em;
+    }
+  }
+
+  .globalMetric {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    
+    .value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--brand-primary);
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+    
+    .label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--txt-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+  }
 }
 
-.barGroup {
-  flex: 1;
+.chartGrid {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: $space-xxs;
-  height: 100%;
-  justify-content: flex-end;
-  position: relative;
+  gap: 24px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb);
+    border-radius: 10px;
+  }
 }
 
-.maxBar {
-  width: 100%;
-  background: var(--sep-standard);
-  border-radius: 4px 4px 0 0;
-  position: relative;
+.barWrapper {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.barHeader {
+  display: flex;
+  justify-content: space-between;
   align-items: flex-end;
+
+  .productInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    
+    .name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--txt-primary);
+      letter-spacing: -0.01em;
+    }
+    
+    .sku {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--txt-muted);
+      font-family: monospace;
+    }
+  }
+
+  .metrics {
+    font-size: 12px;
+    font-weight: 700;
+    
+    .actual {
+      color: var(--txt-primary);
+      font-size: 13px;
+    }
+    
+    .separator {
+      color: var(--txt-muted);
+      margin: 0 4px;
+      font-weight: 400;
+    }
+    
+    .total {
+      color: var(--txt-muted);
+    }
+  }
 }
 
-.actualBar {
-  width: 100%;
-  background: var(--brand-primary);
-  border-radius: 4px 4px 0 0;
-  transition: var(--mot-standard);
-}
-
-.label {
-  position: absolute;
-  bottom: -35px;
-  font-size: 9px;
-  font-weight: $f-weight-semibold;
-  color: var(--txt-muted);
-  text-transform: uppercase;
-  transform: rotate(-45deg);
-  white-space: nowrap;
-  max-width: 60px;
+.track {
+  height: 10px;
+  background: var(--sys-surface-variant);
+  border-radius: var(--rad-pill);
+  position: relative;
   overflow: hidden;
-  text-overflow: ellipsis;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 }
+
+.fill {
+  height: 100%;
+  border-radius: var(--rad-pill);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.fillNormal { background: var(--grad-blue); }
+.fillWarning { background: var(--grad-orange); }
+.fillCritical { background: var(--grad-red); }
+
+.thresholdMarker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--txt-primary);
+  opacity: 0.2;
+  z-index: 2;
+}
+
+.footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--sep-light);
+  flex-shrink: 0;
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+  
+  .legendItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    span {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--txt-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dotNormal { background: var(--brand-primary); box-shadow: 0 0 8px var(--brand-primary-alpha-bold); }
+.dotWarning { background: var(--stat-warning); box-shadow: 0 0 8px var(--stat-warning-alpha); }
+.dotCritical { background: var(--stat-danger); box-shadow: 0 0 8px var(--stat-danger-alpha); }
