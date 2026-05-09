@@ -1,58 +1,39 @@
-import './App.css'
+import { useState } from 'react';
+import { ProductTable } from './components/inventory/ProductTable';
+import { ProductDrawer } from './components/inventory/ProductDrawer';
+import type { Product } from './types/inventory';
+import './App.css';
+
+// Datos Mock para desarrollo inicial
+const MOCK_PRODUCTS: Product[] = [
+  { id: '1', name: 'Laptop Pro 14"', sku: 'LP-001', category_name: 'Electrónica', price: 1200, stock_actual: 45, min_stock: 15, max_stock: 60 },
+  { id: '2', name: 'Mouse Inalámbrico', sku: 'MOU-001', category_name: 'Accesorios', price: 25, stock_actual: 8, min_stock: 15, max_stock: 50 },
+  { id: '3', name: 'Teclado Mecánico RGB', sku: 'TEC-092', category_name: 'Electrónica', price: 85, stock_actual: 0, min_stock: 15, max_stock: 100 },
+];
 
 function App() {
-  const mockProducts = [
-    { id: 1, nombre: 'Laptop Pro 15', stock: 10, estado: 'ok', precio: '$1.200' },
-    { id: 2, nombre: 'Mouse Inalámbrico', stock: 3, estado: 'warning', precio: '$25' },
-    { id: 3, nombre: 'Monitor 4K', stock: 0, estado: 'danger', precio: '$450' },
-  ];
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   return (
-    <div className="showcase-container">
-      <header className="showcase-header">
-        <h1>Sistema de Gestión</h1>
-        <p className="text-secondary">Visualización de tokens y componentes premium</p>
+    <div className="container">
+      <header>
+        <h1>Gestión de Inventario</h1>
       </header>
+      
+      <main>
+        <ProductTable 
+          products={MOCK_PRODUCTS} 
+          onSelect={setSelectedProduct} 
+        />
+      </main>
 
-      <section className="kpi-grid">
-        <div className="kpi-card">
-          <span className="text-secondary">Total Productos</span>
-          <div className="metric">1.240</div>
-        </div>
-        <div className="kpi-card">
-          <span className="text-secondary">Stock Crítico</span>
-          <div className="metric text-danger">12</div>
-        </div>
-      </section>
-
-      <section className="table-container">
-        <table className="premium-table">
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Precio</th>
-              <th>Stock</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockProducts.map(p => (
-              <tr key={p.id}>
-                <td className="font-medium">{p.nombre}</td>
-                <td className="text-secondary">{p.precio}</td>
-                <td>{p.stock}</td>
-                <td>
-                  <span className={`badge is-${p.estado}`}>
-                    {p.estado === 'ok' ? 'Saludable' : p.estado === 'warning' ? 'Bajo' : 'Crítico'}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      <ProductDrawer 
+        product={selectedProduct} 
+        onClose={() => setSelectedProduct(null)}
+        onMovement={() => console.log('Abrir Modal')}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
