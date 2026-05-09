@@ -33,7 +33,7 @@ La experiencia (y también la teoria) me ha enseñado que subestimar un proyecto
 
 1. Deployment/Orquestación/Infraestructura:
 
-Tengo que diagramar una arquitectura para un sistema de gestión de stock, donde se me pide una base de datos relacional SQL (producto-categoria-movimientos-hitorial) preferentemente postgres sql, un back-end preferentemente Python, front-end preferentemente React, mi propuesta inicial es hacer uso de Dockerfiles Multi-stage builds para el frontend y el backend, considerado un nginx para el front. Orquestado por un Compose, el mismo tendrá las conexiónes de red y los volumenes necesarios para los datos/logs/archivos, además de un uso importante del .env y multiples compose.yaml: uno para producción y otro para desarrollo. Inicialización de la base de datos con el script `init.sql` en la carpeta `basededatos/` para el entorno de desarrollo y/o local.
+   Tengo que diagramar una arquitectura para un sistema de gestión de stock, donde se me pide una base de datos relacional SQL (producto-categoria-movimientos-hitorial) preferentemente postgres sql, un back-end preferentemente Python,    front-end preferentemente React, mi propuesta inicial es hacer uso de Dockerfiles Multi-stage builds para el frontend y el backend, considerado un nginx para el front. Orquestado por un Compose, el mismo tendrá las conexiónes de red    y los volumenes necesarios para los datos/logs/archivos, además de un uso importante del .env y multiples compose.yaml: uno para producción y otro para desarrollo. Inicialización de la base de datos con el script `init.sql` en la       carpeta `basededatos/` para el entorno de desarrollo y/o local.
 
 2. Base de datos:
 
