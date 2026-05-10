@@ -8,13 +8,12 @@ import { PageHeader } from './components/layout/PageHeader';
 import { ProductTable } from './components/inventory/ProductTable';
 import { ProductDrawer } from './components/inventory/ProductDrawer';
 import { MovementModal } from './components/inventory/MovementModal';
-import { InventoryControls } from './components/inventory/InventoryControls';
+import { ProductModal } from './components/inventory/ProductModal';
 import { AlertPanel } from './components/inventory/AlertPanel';
-import { ComparativeStockChart } from './components/inventory/ComparativeStockChart';
 
 // Capas de Servicio y Orquestación
 import { useProducts, useCategories, useStockMutations } from './hooks/useStock';
-import type { Product, CreateMovementDTO } from './types/stock.types';
+import type { Product, CreateMovementDTO, CreateProductDTO } from './types/stock.types';
 
 // Estilos
 import './styles/App.scss';
@@ -30,21 +29,27 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [searchTerm, setSearchTerm] = useState('');
   
-  const { data: products = [], isLoading, isError, refetch } = useProducts(selectedCategory);
+  // Traemos TODOS los productos para que las notificaciones sean globales (independientes del filtro)
+  const { data: products = [], isLoading, isError, refetch } = useProducts();
   const { data: categories = [] } = useCategories();
-  const { registerMovement } = useStockMutations();
+  const { registerMovement, createProduct } = useStockMutations();
 
   // --- Estado de UI de Negocio ---
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isMovementModalOpen, setIsMovementModalOpen] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
-  // --- Lógica de Negocio Local (Filtrado) ---
+  // --- Lógica de Negocio Local (Filtrado Combinado) ---
   const filteredProducts = useMemo(() => {
-    return products.filter(p => 
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      p.sku.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [products, searchTerm]);
+    return products.filter(p => {
+      const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                           p.sku.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesCategory = selectedCategory === 'Todos' || p.category_name === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    });
+  }, [products, searchTerm, selectedCategory]);
 
   // --- Handlers de Acciones ---
   const handleQuickMovement = (product: Product) => {
@@ -55,6 +60,11 @@ function App() {
   const handleMovementSubmit = async (movementData: CreateMovementDTO) => {
     await registerMovement.mutateAsync(movementData);
     setIsMovementModalOpen(false);
+  };
+
+  const handleCreateProductSubmit = async (productData: CreateProductDTO) => {
+    await createProduct.mutateAsync(productData);
+    setIsProductModalOpen(false);
   };
 
   // --- Renderizado de Estados de Error ---
@@ -72,55 +82,78 @@ function App() {
       <TopNav 
         isDarkMode={isDarkMode} 
         onThemeToggle={() => setIsDarkMode(!isDarkMode)} 
+        products={products}
+        onSelectProduct={(p) => setSelectedProduct(p)}
       />
 
       <main className="mainContainer">
-        <PageHeader 
-          onCreateProduct={() => alert('Próximamente: Crear Producto')}
-          onExport={() => alert('Próximamente: Exportar Datos')}
-        />
+        {/* Sidebar Izquierda: Categorías */}
+        <aside className="sidebarLeft">
+          <h3 className="sidebarTitle">Categorías</h3>
+          <nav className="sideNavList">
+            <button 
+              className={`navItem ${selectedCategory === 'Todos' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('Todos')}
+            >
+              Todos los Productos
+            </button>
+            {categories.map(cat => (
+              <button 
+                key={cat.id}
+                className={`navItem ${selectedCategory === cat.name ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(cat.name)}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </nav>
+        </aside>
 
-        <section className="inventorySection">
-          <div className="dashboardGrid">
-            <AlertPanel products={products} />
-            <ComparativeStockChart products={products} />
-          </div>
-
-          <InventoryControls 
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
+        {/* Área Central: Contenido Principal */}
+        <div className="contentArea">
+          <PageHeader 
+            onCreateProduct={() => setIsProductModalOpen(true)}
+            onExport={() => alert('Próximamente: Exportar Datos')}
           />
-          
-          <div className="contentCard">
-            {isLoading ? (
-              <div className="skeletonContainer">
-                <p>Cargando inventario...</p>
-              </div>
-            ) : filteredProducts.length > 0 ? (
-              <ProductTable 
-                products={filteredProducts} 
-                onSelect={setSelectedProduct} 
-                onQuickMovement={handleQuickMovement}
-              />
-            ) : (
-              <div className="emptyState">
-                <div className="emptyIcon">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.2 }}>
+
+          <section className="inventorySection">
+            <div className="controlBar">
+              <div className="searchWrapper" style={{ maxWidth: '100%' }}>
+                <div className="searchIcon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
                 </div>
-                <p>No se encontraron productos</p>
-                <button className="btnGhost" onClick={() => { setSearchTerm(''); setSelectedCategory('Todos'); }}>
-                  Limpiar filtros
-                </button>
+                <input 
+                  type="text" 
+                  placeholder="Buscar productos por nombre o SKU..." 
+                  className="iosSearch"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-            )}
-          </div>
-        </section>
+            </div>
+            
+            <div className="contentCard">
+              {isLoading ? (
+                <div className="skeletonContainer">
+                  <p>Cargando inventario...</p>
+                </div>
+              ) : filteredProducts.length > 0 ? (
+                <ProductTable 
+                  products={filteredProducts} 
+                  onSelect={setSelectedProduct} 
+                  onQuickMovement={handleQuickMovement}
+                />
+              ) : (
+                <div className="emptyState">
+                  <p>No se encontraron productos</p>
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
       </main>
 
       {/* Capa de Modales y Detalle */}
@@ -135,6 +168,14 @@ function App() {
           product={selectedProduct} 
           onClose={() => setIsMovementModalOpen(false)} 
           onSubmit={handleMovementSubmit} 
+        />
+      )}
+
+      {isProductModalOpen && (
+        <ProductModal 
+          categories={categories}
+          onClose={() => setIsProductModalOpen(false)} 
+          onSubmit={handleCreateProductSubmit} 
         />
       )}
     </div>

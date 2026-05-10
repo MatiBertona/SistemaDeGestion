@@ -15,6 +15,7 @@ class CategoriaModel(Base):
     __table_args__ = {"schema": "inventario"}
     id = Column(Integer, primary_key=True)
     nombre = Column(String(100), nullable=False)
+    descripcion = Column(String(255))
     productos = relationship("ProductoModel", back_populates="categoria")
 
 class ProductoModel(Base):

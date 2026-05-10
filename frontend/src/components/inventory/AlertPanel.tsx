@@ -4,9 +4,10 @@ import styles from '../../styles/components/inventory/AlertPanel.module.scss';
 
 interface Props {
   products: Product[];
+  onSelectProduct: (product: Product) => void;
 }
 
-export const AlertPanel: React.FC<Props> = ({ products }) => {
+export const AlertPanel: React.FC<Props> = ({ products, onSelectProduct }) => {
   const critical = products.filter(p => p.stock_actual === 0);
   const low = products.filter(p => p.stock_actual <= p.min_stock && p.stock_actual > 0);
   const allAlerts = [...critical, ...low];
@@ -51,7 +52,12 @@ export const AlertPanel: React.FC<Props> = ({ products }) => {
           allAlerts.map(p => {
             const isCritical = p.stock_actual === 0;
             return (
-              <div key={p.id} className={styles.alertItem}>
+              <div 
+                key={p.id} 
+                className={styles.alertItem} 
+                onClick={() => onSelectProduct(p)}
+                style={{ cursor: 'pointer' }}
+              >
                 <div className={styles.itemMain}>
                   <div className={`${styles.dot} ${isCritical ? styles.dotCritical : styles.dotLow}`} />
                   <div className={styles.itemInfo}>

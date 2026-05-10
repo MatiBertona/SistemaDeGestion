@@ -1,11 +1,19 @@
-import type { FC } from 'react';
+import { FC, useState } from 'react';
+import type { Product } from '../../types/stock.types';
+import { AlertPanel } from '../inventory/AlertPanel';
 
 interface Props {
   isDarkMode: boolean;
   onThemeToggle: () => void;
+  products: Product[];
+  onSelectProduct: (product: Product) => void;
 }
 
-export const TopNav: FC<Props> = ({ isDarkMode, onThemeToggle }) => {
+export const TopNav: FC<Props> = ({ isDarkMode, onThemeToggle, products, onSelectProduct }) => {
+  const [showNotifications, setShowNotifications] = useState(false);
+  
+  const lowStockCount = products.filter(p => p.stock_actual <= p.min_stock).length;
+
   return (
     <nav className="topNav">
       <div className="navContent">
@@ -27,20 +35,37 @@ export const TopNav: FC<Props> = ({ isDarkMode, onThemeToggle }) => {
             )}
           </button>
           
-          <button className="navIconBtn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-            <span className="badge">3</span>
-          </button>
+          <div style={{ position: 'relative' }}>
+            <button 
+              className="navIconBtn" 
+              onClick={() => setShowNotifications(!showNotifications)}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              {lowStockCount > 0 && <span className="badge">{lowStockCount}</span>}
+            </button>
+
+            {showNotifications && (
+              <div className="notificationDropdown" onClick={(e) => e.stopPropagation()}>
+                <AlertPanel 
+                  products={products} 
+                  onSelectProduct={(p) => {
+                    onSelectProduct(p);
+                    setShowNotifications(false);
+                  }} 
+                />
+              </div>
+            )}
+          </div>
           
           <div className="userProfile">
             <div className="avatar">JS</div>
             <span className="userName">Juan Segovia</span>
-            <button className="logoutBtn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            </button>
           </div>
         </div>
       </div>
+      {showNotifications && (
+        <div className="dropdownOverlay" onClick={() => setShowNotifications(false)} />
+      )}
     </nav>
   );
 };
