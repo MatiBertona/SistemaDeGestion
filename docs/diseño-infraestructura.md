@@ -36,20 +36,19 @@ En el entorno de desarrollo, el contenedor utiliza el servidor de desarrollo de 
 - **Volúmenes:** Se monta `./frontend` para reflejar cambios en tiempo real, protegiendo `node_modules` mediante un volumen anónimo.
 
 ## 4. Orquestación Global (Docker Compose)
-El sistema utiliza múltiples archivos para separar la configuración base de la específica de cada entorno:
+El sistema utiliza múltiples archivos para separar la configuración base de la específica de producción:
 
-- **`compose.yaml`:** Definiciones base compartidas (redes, nombres de contenedores, lógica de build).
-- **`compose.dev.yaml`:** Configuraciones para desarrollo (puertos expuestos, volúmenes para hot-reload, modo debug).
+- **`compose.yaml`:** Definiciones para desarrollo (puertos expuestos, volúmenes para hot-reload, modo debug).
 - **`compose.prod.yaml`:** Configuraciones para producción (optimización de recursos, reinicio automático, seguridad reforzada).
 
 ### Redes y Comunicación
 Se utiliza una red dedicada llamada `inventory_network` (driver: bridge) para aislar el tráfico del sistema:
 - **Aislamiento:** Los contenedores se comunican entre sí usando sus nombres de servicio (ej: el backend se conecta a `db:5432`).
-- **Seguridad:** Solo los puertos explícitamente declarados en los archivos `compose.dev/prod.yaml` son accesibles desde el host.
+- **Seguridad:** Solo los puertos explícitamente declarados en los archivos `compose.yaml` o `compose.prod.yaml` son accesibles desde el host.
 
 ### Persistencia de Datos (Volúmenes)
 - **`inventario_pg_data`:** Volumen nombrado para la base de datos PostgreSQL. Garantiza que la información no se pierda al destruir los contenedores.
-- **Volúmenes de Desarrollo:** En `compose.dev.yaml`, se montan las carpetas locales (`./backend` y `./frontend`) para permitir el desarrollo en tiempo real sin reconstruir imágenes.
+- **Volúmenes de Desarrollo:** En `compose.yaml`, se montan las carpetas locales (`./backend` y `./frontend`) para permitir el desarrollo en tiempo real sin reconstruir imágenes.
 
 ## 5. Mantenimiento y Operación
 

@@ -180,7 +180,7 @@ cp .env.example .env
 Incluye **Hot Reload** del código y exposición de la base de datos (puerto `5432`) para herramientas locales.
 
 ```bash
-docker compose -f compose.yaml -f compose.dev.yaml up -d --build
+docker compose up -d --build
 ```
 
 ### 3. Iniciar en Entorno de Producción
@@ -195,10 +195,10 @@ docker compose -f compose.yaml -f compose.prod.yaml up -d --build
 
 Una vez iniciados los contenedores, los servicios estarán disponibles en:
 
-- **Backend API:** http://localhost:8000
-- **Documentación interactiva (Swagger):** http://localhost:8000/docs
+- **Backend API:** http://localhost:8001
+- **Documentación interactiva (Swagger):** http://localhost:8001/docs
 - **Frontend (Desarrollo):** http://localhost:5173
-- **Frontend (Producción):** http://localhost:80
+- **Frontend (Producción):** http://localhost:8081
 
 ### 5. Ejecución de Pruebas
 
@@ -252,10 +252,10 @@ A continuación se detallan las decisiones arquitectónicas y técnicas tomadas 
 
 ### 3. Frontend (Tecnología y UX)
 *   **¿Por qué React?** Ofrece control total sobre el ciclo de vida, rendimiento optimizado y permite un sistema de diseño a medida con **TanStack Query** para la gestión de estado de servidor.
+*   **Visualización de Datos:** En lugar de gráficos estáticos separados, se optó por una **Integración Quirúrgica de Métricas**:
+    *   **Capacity Tracks:** Barras de progreso integradas en la tabla de productos que permiten comparar visualmente el stock actual contra la capacidad máxima y el umbral mínimo (UX de alta densidad).
+    *   **Risk Index:** Algoritmo en el panel de notificaciones que calcula la criticidad de la operación en tiempo real (0-100%).
 *   **Arquitectura de Estilos:** Sistema de **Tokens Premium** con jerarquía de elevación multi-capa y gradientes semánticos. Organización quirúrgica de archivos para escalabilidad y soporte nativo de **Modo Oscuro**.
-*   **Analítica de Datos:** El Dashboard no solo visualiza, sino que procesa información:
-    *   **Risk Index:** Algoritmo que calcula la criticidad de la operación en tiempo real.
-    *   **Operational Capacity:** Análisis porcentual de ocupación de almacén por SKU.
 *   **UX Operativa:** Implementación de **Acciones Rápidas (Dropdowns)**, **Drawer Lateral** para análisis profundo y **Validaciones en tiempo real** para una experiencia fluida y profesional.
 
 ### 4. Uso de Inteligencia Artificial (Gemini CLI)
