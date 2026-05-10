@@ -73,7 +73,60 @@
 .stock {
   font-weight: $f-weight-bold;
   text-align: right;
-  padding-right: var(--rad-xl) !important;
+}
+
+.stockColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+  padding: 0 8px;
+}
+
+.stockInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  
+  .value {
+    font-weight: $f-weight-bold;
+    font-size: 14px;
+    color: var(--txt-primary);
+  }
+  .total {
+    font-size: 10px;
+    font-weight: $f-weight-medium;
+    color: var(--txt-muted);
+    text-transform: uppercase;
+  }
+}
+
+.capacityTrack {
+  height: 6px;
+  background: var(--sys-surface-variant);
+  border-radius: var(--rad-pill);
+  position: relative;
+  overflow: hidden;
+}
+
+.capacityFill {
+  height: 100%;
+  border-radius: var(--rad-pill);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fillHealthy { background: var(--stat-success); }
+.fillWarning { background: var(--stat-warning); }
+.fillCritical { background: var(--stat-danger); }
+
+.thresholdMarker {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: var(--txt-primary);
+  opacity: 0.2;
+  z-index: 2;
 }
 
 .status {

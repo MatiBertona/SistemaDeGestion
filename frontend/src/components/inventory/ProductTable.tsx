@@ -59,8 +59,27 @@ export const ProductTable: React.FC<Props> = ({ products, onSelect, onQuickMovem
                 <td>
                   <span className={styles.category}>{p.category_name}</span>
                 </td>
-                <td className={styles.stock}>
-                  {p.stock_actual}
+                <td>
+                  <div className={styles.stockColumn}>
+                    <div className={styles.stockInfo}>
+                      <span className={styles.value}>{p.stock_actual}</span>
+                      <span className={styles.total}>Cap: {p.max_stock}</span>
+                    </div>
+                    <div className={styles.capacityTrack}>
+                      <div 
+                        className={`${styles.capacityFill} ${
+                          p.stock_actual === 0 ? styles.fillCritical : 
+                          p.stock_actual <= p.min_stock ? styles.fillWarning : 
+                          styles.fillHealthy
+                        }`}
+                        style={{ width: `${Math.min((p.stock_actual / p.max_stock) * 100, 100)}%` }}
+                      />
+                      <div 
+                        className={styles.thresholdMarker}
+                        style={{ left: `${(p.min_stock / p.max_stock) * 100}%` }}
+                      />
+                    </div>
+                  </div>
                 </td>
                 <td>
                   {isCritical ? (
