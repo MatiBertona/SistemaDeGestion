@@ -20,7 +20,11 @@ class SQLAlchemyProductoRepository(ProductoRepository):
             stock_actual=model.stock_actual,
             min_stock=model.min_stock,
             max_stock=model.max_stock,
-            categoria=CategoriaEntity(id=model.categoria.id, nombre=model.categoria.nombre) if model.categoria else None
+            categoria=CategoriaEntity(
+                id=model.categoria.id, 
+                nombre=model.categoria.nombre,
+                descripcion=model.categoria.descripcion
+            ) if model.categoria else None
         )
 
     async def get_all(self, categoria_nombre: Optional[str] = None) -> List[ProductoEntity]:

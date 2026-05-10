@@ -12,4 +12,4 @@ class SQLAlchemyCategoriaRepository(CategoriaRepository):
     async def get_all(self) -> List[CategoriaEntity]:
         result = await self.db.execute(select(CategoriaModel))
         models = result.scalars().all()
-        return [CategoriaEntity(id=m.id, nombre=m.nombre) for m in models]
+        return [CategoriaEntity(id=m.id, nombre=m.nombre, descripcion=m.descripcion) for m in models]
