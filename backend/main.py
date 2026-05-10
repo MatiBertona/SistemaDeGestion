@@ -11,16 +11,7 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Inventory API")
 
-# Manejador global de excepciones para depuración
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Error no manejado: {exc}", exc_info=True)
-    return JSONResponse(
-        status_code=500,
-        content={"message": "Internal Server Error", "detail": str(exc)},
-    )
-
-# Configuración de CORS
+# Configuración de CORS - Debe ir antes de los routers
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
@@ -36,6 +27,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Manejador global de excepciones para depuración
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Error no manejado: {exc}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"message": "Internal Server Error", "detail": str(exc)},
+    )
 
 app.include_router(productos_router)
 app.include_router(categorias_router)
