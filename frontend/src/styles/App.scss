@@ -20,7 +20,31 @@
   align-items: center;
   padding: 0 var(--rad-xl);
 
-  .navContent {
+  .notificationDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    width: 320px;
+    background: var(--sys-surface-alpha);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-radius: 12px;
+    box-shadow: var(--elev-lg);
+    border: 1px solid var(--sep-standard);
+    z-index: 1000;
+    padding: 16px;
+    animation: dropdownIn 0.2s ease-out;
+  }
+}
+
+.dropdownOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.topNav .navContent {
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
@@ -46,7 +70,7 @@
       }
     }
   }
-}
+
 
 .navActions {
   display: flex;
@@ -131,11 +155,77 @@
 }
 
 .mainContainer {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
   width: 100%;
-  padding: var(--rad-xl);
+  padding: 0;
   flex: 1;
+  display: flex;
+}
+
+.sidebarLeft {
+  width: 260px;
+  background: transparent;
+  padding: var(--rad-xl);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 52px);
+  position: sticky;
+  top: 52px;
+}
+
+.contentArea {
+  flex: 1;
+  padding: var(--rad-xl);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rad-xl);
+}
+
+.sidebarTitle {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--txt-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: $space-lg;
+  padding-left: 12px;
+}
+
+.sideNavList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .navItem {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background: transparent;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--txt-secondary);
+    cursor: pointer;
+    transition: all var(--mot-quick);
+
+    &:hover {
+      background: var(--sys-surface-hover);
+      color: var(--txt-primary);
+    }
+
+    &.active {
+      background: var(--sys-surface);
+      color: var(--brand-primary);
+      border-color: var(--sep-standard);
+      box-shadow: var(--elev-sm);
+    }
+  }
 }
 
 .pageHeader {
@@ -172,16 +262,6 @@
   display: flex;
   flex-direction: column;
   gap: $space-lg;
-}
-
-.dashboardGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $space-lg;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 400px 1fr;
-  }
 }
 
 .controlBar {
