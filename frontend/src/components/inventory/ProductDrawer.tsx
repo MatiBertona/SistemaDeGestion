@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import type { Product } from '../../types/stock.types';
 import { StockChart } from './StockChart';
+import { useProductMovements } from '../../hooks/useStock';
 import styles from '../../styles/components/inventory/ProductDrawer.module.scss';
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export const ProductDrawer: FC<Props> = ({ product, onClose, onMovement }) => {
+  const { data: movements = [], isLoading: isLoadingMovements } = useProductMovements(product?.id || '');
+
   if (!product) return null;
 
   const isCritical = product.stock_actual === 0;
@@ -80,6 +83,43 @@ export const ProductDrawer: FC<Props> = ({ product, onClose, onMovement }) => {
                 <span className={styles.itemLabel}>Capacidad Máx</span>
                 <span className={styles.itemValue}>{product.max_stock} un.</span>
               </div>
+            </div>
+          </section>
+
+          <section className={styles.section}>
+            <div className={styles.sectionHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h4>Historial</h4>
+              <span className={styles.badgeHealthy} style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem' }}>{movements.length}</span>
+            </div>
+            
+            <div className={styles.movementList} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '200px', overflowY: 'auto' }}>
+              {isLoadingMovements ? (
+                <p style={{ opacity: 0.6, fontSize: '0.875rem' }}>Cargando historial...</p>
+              ) : movements.length > 0 ? (
+                movements.map(m => (
+                  <div key={m.id} style={{ padding: '0.75rem', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <span style={{ 
+                        fontSize: '0.7rem', 
+                        fontWeight: 'bold', 
+                        textTransform: 'uppercase',
+                        color: m.type === 'ENTRADA' ? 'var(--stat-success)' : 'var(--stat-danger)'
+                      }}>
+                        {m.type === 'ENTRADA' ? 'Entrada' : 'Salida'}
+                      </span>
+                      <span style={{ fontSize: '0.7rem', opacity: 0.6 }}>
+                        {new Date(m.date).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                      <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>{m.type === 'ENTRADA' ? '+' : '-'}{m.amount} un.</span>
+                      <p style={{ fontSize: '0.8rem', opacity: 0.8, margin: 0, textAlign: 'right', maxWidth: '60%' }}>{m.reason}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p style={{ opacity: 0.6, fontSize: '0.875rem' }}>Sin movimientos</p>
+              )}
             </div>
           </section>
         </div>
