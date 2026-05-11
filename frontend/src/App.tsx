@@ -9,7 +9,6 @@ import { ProductTable } from './components/inventory/ProductTable';
 import { ProductDrawer } from './components/inventory/ProductDrawer';
 import { MovementModal } from './components/inventory/MovementModal';
 import { ProductModal } from './components/inventory/ProductModal';
-import { AlertPanel } from './components/inventory/AlertPanel';
 
 // Capas de Servicio y Orquestación
 import { useProducts, useCategories, useStockMutations } from './hooks/useStock';
