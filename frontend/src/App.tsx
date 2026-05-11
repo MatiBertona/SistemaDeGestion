@@ -28,8 +28,8 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Traemos TODOS los productos para que las notificaciones sean globales (independientes del filtro)
-  const { data: products = [], isLoading, isError, refetch } = useProducts();
+  // Traemos los productos filtrados por categoría desde el back
+  const { data: products = [], isLoading, isError, refetch } = useProducts(selectedCategory === 'Todos' ? undefined : selectedCategory);
   const { data: categories = [] } = useCategories();
   const { registerMovement, createProduct } = useStockMutations();
 
@@ -38,17 +38,15 @@ function App() {
   const [isMovementModalOpen, setIsMovementModalOpen] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
-  // --- Lógica de Negocio Local (Filtrado Combinado) ---
+  // --- Lógica de Negocio Local (Solo búsqueda, la categoría ya viene filtrada) ---
   const filteredProducts = useMemo(() => {
     return products.filter(p => {
       const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                            p.sku.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesCategory = selectedCategory === 'Todos' || p.category_name === selectedCategory;
-      
-      return matchesSearch && matchesCategory;
+      return matchesSearch;
     });
-  }, [products, searchTerm, selectedCategory]);
+  }, [products, searchTerm]);
 
   // --- Handlers de Acciones ---
   const handleQuickMovement = (product: Product) => {
