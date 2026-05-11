@@ -27,9 +27,9 @@ Este documento describe la arquitectura, el proceso de diseño y las especificac
 
 ### Pensando el problema
 
-Tras leer la consigna, me tomé un momento para diagramar el proyecto en su totalidad. Si bien el requerimiento del deploy se engloba dentro del back-end, hago una distinción importante: la infraestructura también debe ser diseñada desde el día uno y no pensada como parte del back-end. Es vital entender cómo se van a comunicar todas las partes involucradas para lograr una integración segura, fluida, rastreable y fácilmente configurable.
+Tras leer la consigna, me tomé un momento para diagramar el proyecto en su totalidad. Si bien el requerimiento del deploy se engloba dentro del back-end, hago una distinción importante: la infraestructura también debe ser diseñada desde el día uno y no pensada como parte del back-end. Es vital entender cómo se van a comunicar todas las partes involucradas para lograr una integración segura, fluida, rastreable y configurable.
 
-Para organizar todo esto, inicié una búsqueda con prompts orientativos en el chat de Gemini. Mi intención era validar mis primeras ideas y corregir el rumbo si mi planteo resultaba ser muy rebuscado, lento, o desproporcionado para el alcance real del proyecto (ya sea definido por mi criterio, el equipo o el cliente), además de mostrarles como implemento el uso de las herramientas de IA en mi dia a dia.
+Para organizar todo esto, inicié una búsqueda con prompts orientativos en el chat de Gemini. Mi intención era validar mis primeras ideas y corregir el rumbo si mi planteo resultaba ser muy rebuscado, lento, o desproporcionado para el alcance real del proyecto, además de mostrarles como implemento el uso de las herramientas de IA en mi dia a dia.
 
 La experiencia (y también la teoria) me ha enseñado que subestimar un proyecto y optar por herramientas "empaquetadas" o demasiado simples suele traer problemas graves de escalabilidad cuando los requerimientos cambian, y el problema no es que cambien, sino que cambien muy rapido. A continuación, adjunto los prompts iniciales que utilicé para guiar estas primeras decisiones, divididos por las áreas del sistema que me parecen necesarias diagramar:
 
@@ -188,7 +188,7 @@ docker compose up -d --build
 Configuración optimizada y segura (base de datos aislada, sin volúmenes de desarrollo).
 
 ```bash
-docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+docker compose -f compose.prod.yaml up -d --build
 ```
 
 ### 4. Acceso a los Servicios
